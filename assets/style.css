@@ -1,0 +1,47 @@
+@font-face {
+    font-family: Lexend;
+    src: url(Lexend-VariableFont_wght.ttf);
+}
+@font-face {
+    font-family: Lexend Peta;
+    src: url(LexendPeta-VariableFont_wght.ttf);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Colors */
+:root {
+    --background: hsl(120, 10%, 10%);
+    --background-light: hsl(120, 3%, 20%);
+    --font: hsl(120, 5%, 75%);
+    --font-light: hsl(120, 3%, 60%);
+}
+
+/* Animations */
+
+/* Reset */
+body, h1, h2, h3, h4, h5, h6, p, span, a, ul, ol, li, div, main, section, article, figure, figcaption, img {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    display: block;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Font */
+h1, h2, h3, h4, h5, h6, p, a, span, section, main, div, li, figcaption {
+    font-family: Lexend, sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    color: var(--font);
+    line-height: 140%;
+}
+
+/* Styles */
