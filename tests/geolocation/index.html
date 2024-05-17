@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geolocation Example</title>
+</head>
+<body>
+    <button onclick="getLocation()">Get Location</button>
+    <p id="status"></p>
+    <p id="location"></p>
+    <button onclick="logSpecs()">Log PC Specs</button>
+    <script>
+        function getLocation() {
+            var status = document.getElementById("status");
+            var locationOutput = document.getElementById("location");
+
+            if (navigator.geolocation) {
+                status.textContent = "Locating…";
+
+                navigator.geolocation.getCurrentPosition(success, error, {
+                    enableHighAccuracy: true,
+                    timeout: 10000, // 10 seconds timeout for GPS
+                    maximumAge: 0
+                });
+            } else {
+                status.textContent = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function success(position) {
+            var latitude  = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var accuracy = position.coords.accuracy;
+
+            var locationOutput = document.getElementById("location");
+            locationOutput.textContent = `Latitude: ${latitude}, Longitude: ${longitude} (Accuracy: ${accuracy} meters)`;
+
+            var status = document.getElementById("status");
+            status.textContent = "";
+        }
+
+        function error(err) {
+            var status = document.getElementById("status");
+            switch(err.code) {
+                case err.PERMISSION_DENIED:
+                    status.textContent = "User denied the request for Geolocation.";
+                    break;
+                case err.POSITION_UNAVAILABLE:
+                    status.textContent = "Location information is unavailable.";
+                    break;
+                case err.TIMEOUT:
+                    status.textContent = "The request to get user location timed out.";
+                    break;
+                case err.UNKNOWN_ERROR:
+                    status.textContent = "An unknown error occurred.";
+                    break;
+            }
+        }
+
+        function logSpecs() {
+            console.log("User-Agent:", navigator.userAgent);
+            console.log("Platform:", navigator.platform);
+            console.log("Language:", navigator.language);
+            console.log("Online:", navigator.onLine);
+            console.log("Screen Resolution:", window.screen.width + "x" + window.screen.height);
+            console.log("Viewport Size:", window.innerWidth + "x" + window.innerHeight);
+            console.log("Color Depth:", window.screen.colorDepth);
+            console.log("Pixel Ratio:", window.devicePixelRatio);
+            console.log("Cookies Enabled:", navigator.cookieEnabled);
+            console.log("Local Storage Available:", typeof(Storage) !== "undefined");
+            console.log("IndexedDB Available:", !!window.indexedDB);
+            
+            if (navigator.connection) {
+                console.log("Connection Type:", navigator.connection.type);
+                console.log("Effective Connection Type:", navigator.connection.effectiveType);
+                console.log("Downlink Speed:", navigator.connection.downlink);
+            } else {
+                console.log("Network Information API not supported.");
+            }
+
+            if (navigator.mediaDevices) {
+                navigator.mediaDevices.enumerateDevices().then(devices => {
+                    devices.forEach(device => {
+                        console.log(`${device.kind}: ${device.label} (ID: ${device.deviceId})`);
+                    });
+                });
+            } else {
+                console.log("Media Devices API not supported.");
+            }
+
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    console.log("Battery Level:", battery.level * 100 + "%");
+                    console.log("Charging:", battery.charging);
+                });
+            } else {
+                console.log("Battery Status API not supported.");
+            }
+        }
+    </script>
+</body>
+</html>

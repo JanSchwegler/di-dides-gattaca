@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Specs with JavaScript</title>
+</head>
+<body>
+    <h1>PC Specifications</h1>
+    <button onclick="logSpecs()">Log PC Specs</button>
+
+    <script>
+        function logSpecs() {
+
+            console.log("Test");
+            // User-Agent
+            console.log("User-Agent:", navigator.userAgent);
+            
+            // Platform
+            console.log("Platform:", navigator.platform);
+            
+            // Language
+            console.log("Language:", navigator.language);
+
+            // Online Status
+            console.log("Online:", navigator.onLine);
+
+            // Screen Resolution
+            console.log("Screen Resolution:", window.screen.width + "x" + window.screen.height);
+
+            // Viewport Size
+            console.log("Viewport Size:", window.innerWidth + "x" + window.innerHeight);
+
+            // Color Depth
+            console.log("Color Depth:", window.screen.colorDepth);
+
+            // Pixel Ratio
+            console.log("Pixel Ratio:", window.devicePixelRatio);
+
+            // Cookies Enabled
+            console.log("Cookies Enabled:", navigator.cookieEnabled);
+
+            // Local Storage
+            console.log("Local Storage Available:", typeof(Storage) !== "undefined");
+
+            // IndexedDB
+            console.log("IndexedDB Available:", !!window.indexedDB);
+            
+            // Geolocation
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    console.log("Geolocation Permission Granted");
+                    console.log("Latitude:", position.coords.latitude);
+                    console.log("Longitude:", position.coords.longitude);
+                    console.log("Altitude:", position.coords.altitude);
+                    console.log("Accuracy:", position.coords.accuracy);
+                    console.log("Altitude Accuracy:", position.coords.altitudeAccuracy);
+                    console.log("Heading:", position.coords.heading);
+                    console.log("Speed:", position.coords.speed);
+                }, error => {
+                    console.error("Geolocation Permission Denied");
+                });
+            } else {
+                console.log("Geolocation API not supported.");
+            }
+
+            // Battery Status
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    console.log("Battery Level:", battery.level * 100 + "%");
+                    console.log("Charging:", battery.charging);
+                });
+            } else {
+                console.log("Battery Status API not supported.");
+            }
+
+            // Network Information
+            if ('connection' in navigator) {
+                console.log("Connection Type:", navigator.connection.type);
+                console.log("Effective Connection Type:", navigator.connection.effectiveType);
+                console.log("Downlink Speed:", navigator.connection.downlink);
+            } else {
+                console.log("Network Information API not supported.");
+            }
+
+            // Media Devices
+            if ('mediaDevices' in navigator) {
+                navigator.mediaDevices.enumerateDevices().then(devices => {
+                    devices.forEach(device => {
+                        console.log(`${device.kind}: ${device.label} (ID: ${device.deviceId})`);
+                    });
+                });
+            } else {
+                console.log("Media Devices API not supported.");
+            }
+
+            // CPU and GPU Information
+            if ('getVRDisplays' in navigator) {
+                navigator.getVRDisplays().then(displays => {
+                    displays.forEach(display => {
+                        console.log("VR Display Name:", display.displayName);
+                        console.log("VR Display DisplayId:", display.displayId);
+                        console.log("VR Display IsConnected:", display.isConnected);
+                    });
+                });
+            } else {
+                console.log("VR Display API not supported.");
+            }
+
+            // IP Addresses
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => console.log("Public IP Address:", data.ip))
+                .catch(error => console.error("Failed to fetch public IP:", error));
+
+            const ipAddr = RTCPeerConnection.prototype.createDataChannel("").constructor.prototype.iceConnectionState;
+            console.log("Private IP Address:", ipAddr.match(/(?:[0-9]{1,3}\.){3}[0-9]{1,3}/));
+
+            // Browser Name and Version
+            const browserName = navigator.appName;
+            const browserVersion = navigator.appVersion;
+            console.log("Browser Name:", browserName);
+            console.log("Browser Version:", browserVersion);
+
+            // List of Installed Extensions
+            if (chrome && chrome.management) {
+                console.log("Installed Extensions:");
+                chrome.management.getAll(extensions => {
+                    console.log("Installed Extensions:");
+                    extensions.forEach(extension => {
+                        console.log(extension.name, "-", extension.version);
+                    });
+                });
+            } else {
+                console.log("Installed Extensions: Not supported or not using Chrome browser.");
+            }
+
+            // Local Storage Information
+            if (typeof(Storage) !== "undefined") {
+                console.log("Local Storage Information:");
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    console.log(`${key}: ${value}`);
+                }
+            } else {
+                console.log("Local Storage not supported.");
+            }
+
+            // Bluetooth Availability
+            if ('bluetooth' in navigator) {
+                console.log("Bluetooth is available.");
+            } else {
+                console.log("Bluetooth is not available.");
+            }
+        }
+    </script>
+</body>
+</html>
