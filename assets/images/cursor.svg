@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg2" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:ns1="http://sozi.baierouge.fr" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 492 779">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #000;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <polygon class="cls-1" points="287 492 451 492 451 451 410 451 410 410 369 410 369 369 328 369 328 328 287 328 287 287 246 287 246 246 205 246 205 205 164 205 164 164 123 164 123 123 82 123 82 82 41 82 41 656 82 656 82 615 123 615 123 574 164 574 164 533 205 533 205 574 246 574 246 656 287 656 287 738 369 738 369 656 328 656 328 574 287 574 287 492"/>
+  <g>
+    <rect id="rect3136" class="cls-2" x="82" y="82" width="41" height="41"/>
+    <rect id="rect3138" class="cls-2" x="123" y="123" width="41" height="41"/>
+    <rect id="rect3140" class="cls-2" x="164" y="164" width="41" height="41"/>
+    <rect id="rect3142" class="cls-2" x="205" y="205" width="41" height="41"/>
+    <rect id="rect3144" class="cls-2" x="246" y="246" width="41" height="41"/>
+    <rect id="rect3146" class="cls-2" x="287" y="287" width="41" height="41"/>
+    <rect id="rect3148" class="cls-2" x="328" y="328" width="41" height="41"/>
+    <rect id="rect3150" class="cls-2" x="369" y="369" width="41" height="41"/>
+    <rect id="rect3152" class="cls-2" x="410" y="410" width="41" height="41"/>
+    <polygon class="cls-2" points="451 451 451 492 287 492 287 574 328 574 328 533 492 533 492 451 451 451"/>
+    <rect id="rect3168" class="cls-2" x="328" y="574" width="41" height="82"/>
+    <rect id="rect3172" class="cls-2" x="369" y="656" width="41" height="82"/>
+    <rect id="rect3178" class="cls-2" x="287" y="738" width="82" height="41"/>
+    <rect id="rect3182" class="cls-2" x="246" y="656" width="41" height="82"/>
+    <rect id="rect3186" class="cls-2" x="205" y="574" width="41" height="82"/>
+    <rect id="rect3188" class="cls-2" x="164" y="533" width="41" height="41"/>
+    <rect id="rect3190" class="cls-2" x="123" y="574" width="41" height="41"/>
+    <rect id="rect3192" class="cls-2" x="82" y="615" width="41" height="41"/>
+    <polygon class="cls-2" points="82 82 82 41 41 41 41 0 0 0 0 697 82 697 82 656 41 656 41 82 82 82"/>
+  </g>
+</svg>

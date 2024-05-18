@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         // Add a delay before starting typing the second line
         setTimeout(() => {
-            typeText(pElement2, content, 50); // Adjust the delay as needed
+            //typeText(pElement2, content, 50); // Adjust the delay as needed
         }, 500); // Adjust the delay as needed
         
         if (!lineHeight) {

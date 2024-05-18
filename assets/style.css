@@ -28,6 +28,10 @@ body, h1, h2, h3, h4, h5, h6, p, span, a, ul, ol, li, div, main, section, articl
     padding: 0;
 }
 
+p {
+    user-select: none;
+}
+
 img {
     display: block;
 }
@@ -63,6 +67,7 @@ body {
     height: 100svh;
     width: 100%;
     background-color: var(--black);
+    cursor: url('images/cursor.svg'), auto;
 }
 
 /* styles - cornerdata*/
@@ -106,7 +111,6 @@ body {
 }
 
 .cornerdata:nth-child(6) {
-    
     top: auto;
     left: auto;
     bottom: var(--border-cornerdata);
