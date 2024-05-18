@@ -1,0 +1,92 @@
+/* styles.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 200%;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.effect-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.text {
+    position: absolute;
+    font-size: 24px;
+    color: #000;
+    transition: transform 0.3s ease, text-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.top-left {
+    top: 0;
+    left: 0;
+    margin: 10px;
+}
+
+.top-right {
+    top: 0;
+    right: 0;
+    margin: 10px;
+}
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+    margin: 10px;
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+}
+
+.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.top-center {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 10px;
+}
+
+.bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 10px;
+}
+
+.left-center {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    margin: 10px;
+}
+
+.right-center {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    margin: 10px;
+}
+
+svg {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
