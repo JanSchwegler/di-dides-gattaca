@@ -18,21 +18,35 @@
 
     <section id="terminal">
         <div id="terminal-content">
-            <p>GTCA OS></p>
+            <p>GTCA OS> </p>
         </div>
     </section>
     
-    <div class="windowIcons">
+    <!-- Window Icons -->
+    <div class="windowIcon" data-window="window1">
         <img src="assets/images/cursor.svg" alt="icon 1">
         <p>Icon 1</p>
     </div>
-    <div class="windowIcons">
+    <div class="windowIcon" data-window="window2">
         <img src="assets/images/cursorPointer.svg" alt="icon 2">
         <p>Icon 2</p>
     </div>
-    <div class="windowIcons">
+    <div class="windowIcon" data-window="window3">
         <img src="assets/images/cursor.svg" alt="icon 3">
         <p>Icon 3</p>
+    </div>
+
+    <!-- Windows -->
+    <div id="window1" class="window">
+        <div class="close">[ close ]</div>
+        <div class="content">This is the content of window 1</div>
+        <div class="resize"></div>
+    </div>
+
+    <div id="window2" class="window">
+        <div class="close">[ close ]</div>
+        <div class="content">This is the content of window 2</div>
+        <div class="resize"></div>
     </div>
 </body>
 </html>

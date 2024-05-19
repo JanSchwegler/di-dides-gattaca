@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable and Resizable Windows</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background">
+        <div class="windowIcon" data-window="window1">☰</div>
+        <div class="windowIcon" data-window="window2">☰</div>
+    </div>
+
+    <!-- HTML for window 1 -->
+    <div id="window1" class="window">
+        <div class="close">✖</div>
+        <div class="content">This is the content of window 1</div>
+        <div class="resize"></div>
+    </div>
+
+    <!-- HTML for window 2 -->
+    <div id="window2" class="window">
+        <div class="close">✖</div>
+        <div class="content">This is the content of window 2</div>
+        <div class="resize"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

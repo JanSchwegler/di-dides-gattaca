@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #2c2c2c;
+    font-family: Arial, sans-serif;
+}
+
+.background {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.window {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: move;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.2s, transform 0.2s; /* Changed duration to 200ms */
+    z-index: 1;
+    overflow: scroll;
+    resize: both;
+}
+
+.window.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.window.active {
+    z-index: 100;
+}
+
+.content {
+    padding: 20px;
+    background-color: #f0f0f0; /* Light grey color for content */
+    border-radius: 8px;
+    cursor: initial; /* Normal cursor for content */
+    user-select: none; /* Make the content not selectable */
+}
+
+.resize {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    right: -10px;
+    bottom: -0px;
+    cursor: se-resize;
+    z-index: 99999999999;
+}
+
+.close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: #ff5c5c;
+    color: white;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.windowIcon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: #4caf50;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: block; /* Ensure it is always visible */
+    margin-right: 10px;
+}
+
+.windowIcon:nth-of-type(2) {
+    left: 50px;
+}
