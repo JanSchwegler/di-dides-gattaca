@@ -8,6 +8,7 @@
     <p id="status"></p>
     <p id="location"></p>
     <button onclick="logSpecs()">Log PC Specs</button>
+    <button onclick="listLocalStorage()">List Local Storage Items</button>
     <script>
         function getLocation() {
             var status = document.getElementById("status");
@@ -94,6 +95,15 @@
                 });
             } else {
                 console.log("Battery Status API not supported.");
+            }
+        }
+
+        function listLocalStorage() {
+            console.log('Local Storage Items:');
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                console.log(`${key}: ${value}`);
             }
         }
     </script>

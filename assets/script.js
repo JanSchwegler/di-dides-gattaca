@@ -7,6 +7,8 @@ let mouseX;
 let mouseY;
 
 // variables - elements
+let bgCanvas;
+let bgCanvasCtx;
 let cdMouse;
 let cdTime
 let cdIp;
@@ -21,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
     cdMouse = document.getElementById('cd-mouse');
     cdTime = document.getElementById('cd-time');
     cdIp = document.getElementById('cd-ip');
+    bgCanvas = document.getElementById('bgNoise');
+    bgCanvasCtx = bgCanvas.getContext('2d');
 
 
 
@@ -31,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('https://api.ipify.org?format=json')
     .then(response => response.json())
     .then(data => {
-        cdIp.innerHTML = "<span class='color-yellow'>" + data.ip + "</span>";
+        cdIp.innerHTML = data.ip;
     });
 
 
@@ -45,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         screenHeight = document.documentElement.clientHeight || window.innerHeight;
 
         // function calls
-        
+        resizeCanvas();
     });
 
 
@@ -71,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
         mouseY = e.clientY;
 
         // update corderdata
-        cdMouse.innerHTML = "x: <span class='color-yellow'>" + mouseX + "</span> | y: <span class='color-yellow'>" + mouseY + "</span>";
+        cdMouse.innerHTML = "x: " + mouseX + " | y: " + mouseY;
     });
     
 
@@ -79,10 +83,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
     // functions
+    // functions - bg noise
+    function resizeCanvas() {
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    function generateNoise() {
+        let width = bgCanvas.width;
+        let height = bgCanvas.height;
+        let imageData = bgCanvasCtx.createImageData(width, height);
+        let buffer = new Uint32Array(imageData.data.buffer);
+      
+        for (let i = 0; i < buffer.length; i++) {
+          let value = Math.random() * 255;
+          let color = value > 127 ? 255 : 0; // Threshold to convert to black or white
+          buffer[i] = (255 << 24) | // alpha
+                      (color << 16) | // red
+                      (color << 8) |  // green
+                      (color);        // blue
+        }
+      
+        bgCanvasCtx.putImageData(imageData, 0, 0);
+    }
+    function updateNoise() {
+        generateNoise();
+        setTimeout(updateNoise, 30);
+    }
+    updateNoise();
+
+
     // functions - cd time
     function updateTime() {
-        const currentTime = new Date();
-        const formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
+        let currentTime = new Date();
+        let formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
         cdTime.textContent = formattedTime;
     }
     updateTime();
@@ -98,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function typeText(element, text, delay) {
         let index = 0;
-        const typing = setInterval(() => {
+        let typing = setInterval(() => {
             if (index < text.length) {
                 element.textContent += text.charAt(index);
                 index++;

@@ -1,10 +1,6 @@
 @font-face {
-    font-family: Lexend;
-    src: url(Lexend-VariableFont_wght.ttf);
-}
-@font-face {
-    font-family: Lexend Peta;
-    src: url(LexendPeta-VariableFont_wght.ttf);
+    font-family: Berkeley;
+    src: url(fonts/BerkeleyMonoTrial-Regular.ttf);
 }
 
 * {
@@ -14,6 +10,7 @@
 /* var */
 :root {
     --black: #131313;
+    --grey: #575757;
     --white: #f6f6f6;
     --yellow: #FFEC1A;
     --green: #2BD92B;
@@ -42,10 +39,10 @@ a {
 
 /* font */
 h1, h2, h3, h4, h5, h6, p, a, span, section, main, div, li, figcaption {
-    font-family: Lexend, sans-serif;
+    font-family: Berkeley, monospace, sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--white);
     line-height: 150%;
 }
@@ -70,47 +67,59 @@ body {
     cursor: url('images/cursor.svg'), auto;
 }
 
+#bgNoise {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.05;
+    filter: blur(0.6px);
+}
+
 /* styles - cornerdata*/
 .cornerdata {
+    --border-cornerdata: 20px;
     position: absolute;
     top: var(--border-cornerdata);
     left: var(--border-cornerdata);
     white-space: nowrap;
-    --border-cornerdata: 40px;
+    transform: none !important;
+    color: var(--grey);
 }
 
-.cornerdata:nth-child(1) {
+.cornerdata:nth-of-type(1) {
     transform: perspective(500px) skew(-5deg, -5deg) rotateY(-5deg);
     transform-origin: right top;
 }
 
-.cornerdata:nth-child(2) {
+.cornerdata:nth-of-type(2) {
     right: var(--border-cornerdata);
     left: auto;
     transform: perspective(500px) skew(5deg, 5deg) rotateY(5deg);
     transform-origin: left top;
 }
 
-.cornerdata:nth-child(3) {
+.cornerdata:nth-of-type(3) {
     top: 50%;
     transform: translateY(-50%);
 }
 
-.cornerdata:nth-child(4) {
+.cornerdata:nth-of-type(4) {
     right: var(--border-cornerdata);
     left: auto;
     top: 50%;
     transform: translateY(-50%);
 }
 
-.cornerdata:nth-child(5) {
+.cornerdata:nth-of-type(5) {
     top: auto;
     bottom: var(--border-cornerdata);
     transform: perspective(500px) skew(5deg, 5deg) rotateY(-5deg);
     transform-origin: right bottom;
 }
 
-.cornerdata:nth-child(6) {
+.cornerdata:nth-of-type(6) {
     top: auto;
     left: auto;
     bottom: var(--border-cornerdata);
@@ -130,6 +139,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     scrollbar-width: none;
+    padding-left: 150px; /* visuel center */
 }
 
 #terminal::-webkit-scrollbar {
@@ -140,7 +150,7 @@ body {
     padding-top: 100px;
     margin: 0 auto;
     width: 40vw;
-    max-width: 600px;
+    max-width: 400px;
     min-height: 100%;
     display: flex;
     flex-direction: column;
@@ -152,4 +162,28 @@ body {
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: nowrap;
+}
+
+/* styles - icons */
+.windowIcons {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.windowIcons p {
+    white-space: nowrap;
+}
+
+.windowIcons:nth-of-type(2) {
+    left: 200px;
+}
+
+.windowIcons:nth-of-type(3) {
+    left: 300px;
 }
