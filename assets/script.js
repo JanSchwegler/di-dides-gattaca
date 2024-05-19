@@ -18,11 +18,11 @@ class PopupWindow {
     init() {
         this.windowElement.querySelector('.close').addEventListener('click', () => this.closeWindow());
         this.windowElement.querySelector('.header').addEventListener('mousedown', (e) => this.startDrag(e));
+        this.windowElement.addEventListener('mousedown', () => this.focusWindow());
         this.iconElement.addEventListener('click', () => this.openWindow());
     }
 
     startDrag(e) {
-        this.focusWindow();
         if (e.target === this.windowElement.querySelector('.close')) return;
         if (e.target !== this.windowElement.querySelector('.header')) return;
 
