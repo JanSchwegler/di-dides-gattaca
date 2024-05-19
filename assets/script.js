@@ -16,10 +16,8 @@ class PopupWindow {
     }
 
     init() {
-        //this.centerWindow();
         this.windowElement.querySelector('.close').addEventListener('click', () => this.closeWindow());
-        this.windowElement.querySelector('.resize').addEventListener('mousedown', (e) => this.startResize(e));
-        this.windowElement.addEventListener('mousedown', (e) => this.startDrag(e));
+        this.windowElement.querySelector('.mover').addEventListener('mousedown', (e) => this.startDrag(e));
         this.iconElement.addEventListener('click', () => this.openWindow());
     }
 
@@ -29,9 +27,9 @@ class PopupWindow {
     }
 
     startDrag(e) {
-        if (e.target === this.windowElement.querySelector('.resize') || e.target === this.windowElement.querySelector('.close')) return;
-
-        if (e.target !== this.windowElement) return;
+        this.focusWindow();
+        if (e.target === this.windowElement.querySelector('.close')) return;
+        if (e.target !== this.windowElement.querySelector('.mover')) return;
 
         this.isDragging = true;
         this.startX = e.clientX - this.windowElement.offsetLeft;
@@ -63,41 +61,11 @@ class PopupWindow {
         this.isDragging = false;
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
-    }
-
-    startResize(e) {
-        this.isResizing = true;
-        this.startX = e.clientX;
-        this.startY = e.clientY;
-        this.initialWidth = this.windowElement.offsetWidth;
-        this.initialHeight = this.windowElement.offsetHeight;
-
-        document.addEventListener('mousemove', this.onResizeMove);
-        document.addEventListener('mouseup', this.onResizeUp);
-    }
-
-    onResizeMove = (e) => {
-        if (!this.isResizing) return;
-
-        let newWidth = this.initialWidth + (e.clientX - this.startX);
-        let newHeight = this.initialHeight + (e.clientY - this.startY);
-
+        // set max height and width
         const maxWidth = document.body.clientWidth - this.windowElement.offsetLeft;
         const maxHeight = document.body.clientHeight - this.windowElement.offsetTop;
-
-        if (newWidth > maxWidth) newWidth = maxWidth;
-        if (newHeight > maxHeight) newHeight = maxHeight;
-        if (newWidth < 100) newWidth = 100;
-        if (newHeight < 100) newHeight = 100;
-
-        this.windowElement.style.width = `${newWidth}px`;
-        this.windowElement.style.height = `${newHeight}px`;
-    }
-
-    onResizeUp = () => {
-        this.isResizing = false;
-        document.removeEventListener('mousemove', this.onResizeMove);
-        document.removeEventListener('mouseup', this.onResizeUp);
+        this.windowElement.style.maxWidth = `${maxWidth}px`;
+        this.windowElement.style.maxHeight = `${maxHeight}px`;
     }
 
     closeWindow() {
@@ -108,13 +76,12 @@ class PopupWindow {
     }
 
     openWindow() {
-        if (this.windowElement.style.display === 'flex') {
+        if (this.windowElement.style.display === 'block') {
             this.focusWindow();
             return;
         }
         
-        this.windowElement.style.display = 'flex';
-        //this.centerWindow();
+        this.windowElement.style.display = 'block';
         setTimeout(() => {
             this.windowElement.classList.add('show');
         }, 10);
