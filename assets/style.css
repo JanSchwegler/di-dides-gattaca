@@ -1,6 +1,6 @@
 @font-face {
     font-family: Berkeley;
-    src: url(fonts/BerkeleyMonoTrial-Regular.ttf);
+    src: url(font/BerkeleyMonoTrial-Regular.ttf);
 }
 
 * {
@@ -60,6 +60,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, section, main, div, li, figcaption {
     color: var(--blue);
 }
 
+.color-grey {
+    color: var(--grey);
+}
+
 body {
     height: 100svh;
     width: 100%;
@@ -85,6 +89,12 @@ body {
     left: var(--border-cornerdata);
     white-space: nowrap;
     color: var(--grey);
+    font-size: 0.8rem;
+}
+
+.cornerdata:nth-of-type(1) {
+    color: var(--yellow);
+    font-size: 1.2rem;
 }
 
 .cornerdata:nth-of-type(2) {
@@ -223,7 +233,7 @@ body {
 /* styles - window */
 .window {
     --header-height: 36px;
-    --header-space-top: 6px;
+    --header-space-top: 7px;
     position: absolute;
     width: 500px;
     height: 300px;
@@ -237,6 +247,7 @@ body {
     overflow: auto;
     resize: both;
     pointer-events: none;
+    min-height: calc(var(--header-height) * 2);
 }
 
 #window1 {
@@ -263,7 +274,7 @@ body {
     z-index: 100;
 }
 
-.window .header {
+.window .header, .window .footer {
     position: sticky;
     top: 0;
     left: 0;
@@ -295,10 +306,59 @@ body {
 }
 
 .window .content {
-    width: 300px;
-    height: 400px;
-    background-color: var(--grey);
     cursor: initial;
-    user-select: none;
     padding: 10px;
+    min-height: calc(100% - (var(--header-height) * 2));
+    height: 800px;
+    width: 800px;
+}
+
+.window .footer {
+    top: auto;
+    bottom: 0;
+    border-top: 2px solid var(--white);
+    border-bottom: none;
+    cursor: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--header-space-top) 10px;
+    gap: 40px;
+}
+
+.window .footer p {
+    color: var(--grey);
+}
+
+/* Vertical scrollbar */
+.window::-webkit-scrollbar {
+    width: calc(var(--header-height) * 0.7);
+    height: calc(var(--header-height) * 0.7);
+}
+
+.window::-webkit-scrollbar-thumb:vertical {
+    background-color: var(--yellow);
+    border-left: 2px solid var(--white);
+}
+
+.window::-webkit-scrollbar-track:vertical {
+    border-left: 2px solid var(--white);
+}
+
+.window::-webkit-scrollbar-thumb:horizontal {
+    background-color: var(--yellow);
+    border-top: 2px solid var(--white);
+}
+
+.window::-webkit-scrollbar-track:horizontal {
+    border-top: 2px solid var(--white);
+}
+
+.window::-webkit-scrollbar-corner {
+    border-top: 2px solid var(--white);
+    border-left: 2px solid var(--white);
+    background-image: url('images/cursor.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: calc(var(--header-height) * 0.3);
 }
