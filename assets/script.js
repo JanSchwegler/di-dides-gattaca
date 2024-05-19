@@ -77,6 +77,7 @@ class PopupWindow {
         }
         
         this.windowElement.style.display = 'block';
+        this.windowElement.style.pointerEvents = 'inherit';
         setTimeout(() => {
             this.windowElement.classList.add('show');
         }, 10);
@@ -276,14 +277,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // functions - popup windows
     const windows = [
-        new PopupWindow(
-            document.getElementById('window1'),
-            document.querySelector('.windowIcon[data-window="window1"]')
-        ),
-        new PopupWindow(
-            document.getElementById('window2'),
-            document.querySelector('.windowIcon[data-window="window2"]')
-        )
+        document.querySelectorAll('.window').forEach(window => {
+            new PopupWindow(
+                window,
+                document.querySelector(`.windowIcon[data-window="${window.id}"]`)
+            );
+        })
     ];
     function movePopupWindows() {
         document.querySelectorAll('.window').forEach(window => {
