@@ -21,11 +21,6 @@ class PopupWindow {
         this.iconElement.addEventListener('click', () => this.openWindow());
     }
 
-    centerWindow() {
-        this.windowElement.style.left = `calc(50% - ${this.windowElement.offsetWidth / 2}px)`;
-        this.windowElement.style.top = `calc(50% - ${this.windowElement.offsetHeight / 2}px)`;
-    }
-
     startDrag(e) {
         this.focusWindow();
         if (e.target === this.windowElement.querySelector('.close')) return;
@@ -146,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // function calls
         resizeCanvas();
+        movePopupWindows();
     });
 
 
@@ -289,4 +285,26 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.windowIcon[data-window="window2"]')
         )
     ];
+    function movePopupWindows() {
+        document.querySelectorAll('.window').forEach(window => {
+            let left = window.offsetLeft;
+            let top = window.offsetTop;
+            const maxWidth = document.body.clientWidth - window.offsetWidth;
+            const maxHeight = document.body.clientHeight - window.offsetHeight;
+
+            if (maxWidth < 0) {
+                window.style.width = `${document.body.clientWidth}px`;
+                left = 0;
+            }
+            if (maxHeight < 0) {
+                window.style.height = `${document.body.clientHeight}px`;
+                top = 0;
+            }
+
+            if (left > maxWidth) left = maxWidth;
+            if (top > maxHeight) top = maxHeight;
+            window.style.left = `${left}px`;
+            window.style.top = `${top}px`;
+        });
+    }
 });
