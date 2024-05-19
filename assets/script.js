@@ -17,14 +17,14 @@ class PopupWindow {
 
     init() {
         this.windowElement.querySelector('.close').addEventListener('click', () => this.closeWindow());
-        this.windowElement.querySelector('.mover').addEventListener('mousedown', (e) => this.startDrag(e));
+        this.windowElement.querySelector('.header').addEventListener('mousedown', (e) => this.startDrag(e));
         this.iconElement.addEventListener('click', () => this.openWindow());
     }
 
     startDrag(e) {
         this.focusWindow();
         if (e.target === this.windowElement.querySelector('.close')) return;
-        if (e.target !== this.windowElement.querySelector('.mover')) return;
+        if (e.target !== this.windowElement.querySelector('.header')) return;
 
         this.isDragging = true;
         this.startX = e.clientX - this.windowElement.offsetLeft;
@@ -301,10 +301,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 top = 0;
             }
 
-            if (left > maxWidth) left = maxWidth;
-            if (top > maxHeight) top = maxHeight;
+            if (left > maxWidth) {
+                if (maxWidth < 0) {
+                    left = 0;
+                } else {
+                    left = maxWidth;
+                }
+            }
+            if (top > maxHeight) {
+                if (maxHeight < 0) {
+                    top = 0;
+                } else {
+                    top = maxHeight;
+                }
+            }
+
             window.style.left = `${left}px`;
             window.style.top = `${top}px`;
         });
     }
+    movePopupWindows();
 });
