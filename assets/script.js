@@ -218,10 +218,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // new terminal line
     let lineHeight = 0;
-    let firstPElement = document.querySelector('#terminal .terminal-line');
-    if (firstPElement) {
-        lineHeight = firstPElement.offsetHeight;
+    function getLineHeight() {
+        let firstPElement = document.querySelector('#terminal .terminal-line');
+        if (firstPElement && lineHeight === 0) {
+            lineHeight = firstPElement.offsetHeight;
+        }
     }
+    getLineHeight();
     function typeText(element, text, delay) {
         let index = 0;
         let typing = setInterval(() => {
@@ -252,12 +255,10 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             //typeText(pElement2, content, 50); // Adjust the delay as needed
         }, 500); // Adjust the delay as needed
-        
-        if (!lineHeight) {
-            firstPElement = document.querySelector('#terminal .terminal-line');
-            if (firstPElement && lineHeight === 0) {
-                lineHeight = firstPElement.offsetHeight;
-            }
+
+        // scroll one line down
+        if (lineHeight === 0) {
+            getLineHeight();
         }
         document.getElementById('terminal').scrollTop += lineHeight;
     }
@@ -273,7 +274,49 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, 500);
     }
-    startAddingLines();
+    //startAddingLines();
+
+    // TypeIt test / 46 characters per line
+    new TypeIt('#terminal-content', {
+        cursorChar: "_",
+        waitUntilVisible: true
+    })
+    .options({ speed: 100 })
+    .type('GTCA OS<br>', { delay: 500 })
+    .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span><br>', { delay: 200 })
+    .type('<span class="color-green">Initializing system...</span><br>', { delay: 2000 })
+
+    .options({ speed: 50 })
+    .type('<br><br>Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span><br>', { delay: 500 })
+    .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD<br>', { delay: 2000 })
+
+    .type('<br>Startup Time: <span class="color-yellow">0:00:07</span><br>', { delay: 200 })
+    .type('Network: <span class="color-green">connected</span><br>', { delay: 200 })
+    .type('IP: <span class="color-yellow">192.168.1.100</span><br>', { delay: 1000 })
+
+    .type('<br><span class="color-green">Checking </span>hardware integrity...<br>', { delay: 3000 })
+    .type('<span class="color-green">Loading </span>kernal modules...<br>', { delay: 5000 })
+    .type('<span class="color-green">Verifying </span>network connection...<br>', { delay: 500 })
+    .type('<span class="color-green">Starting </span>user interface...<br>', { delay: 2000 })
+
+    .type('<br><span class="color-green">Loaded </span>mouseUp ........................... <span class="color-yellow">53%</span><br>', { delay: 200 })
+    .type('<span class="color-green">Loaded </span>keyboardKeydown1 .................. <span class="color-yellow">58%</span><br>', { delay: 200 })
+    .type('<span class="color-green">Loaded </span>keyboardKeydown2 .................. <span class="color-yellow">63%</span><br>', { delay: 200 })
+    .type('<span class="color-green">Loaded </span>keyboardKeydown3 .................. <span class="color-yellow">68%</span><br>', { delay: 200 })
+    .type('<span class="color-green">Loaded </span>keyboardKeydown4 .................. <span class="color-yellow">74%</span><br>', { delay: 200 })
+    .type('<span class="color-green">Loaded </span>keyboardKeydown5 .................. <span class="color-yellow">79%</span><br>', { delay: 200 })
+    .type('<span class="color-green">Loaded </span>keyboardKeydown ................... <span class="color-yellow">84%</span><br>', { delay: 300 })
+    .type('<span class="color-green">Loaded </span>startup ........................... <span class="color-yellow">89%</span><br>', { delay: 1000 })
+    
+    .type('<br><br><span class="color-blue">PLEASE ENTER YOUR INFORMATION:</span><br>', { delay: 100 })
+
+    .type('<br>First Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>', { delay: 1000 }).options({ speed: 200 }).type('Vincent Anton<br>', { delay: 100 }).options({ speed: 50 }) //17 characters in fist string
+    .type('Last Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>', { delay: 1000 }).options({ speed: 200 }).type('Freeman<br>', { delay: 100 }).options({ speed: 50 }) //17 characters in fist string
+    .type('Date of Birth:<span class="color-blue">&nbsp;&nbsp;>&nbsp;</span>', { delay: 1000 }).options({ speed: 200 }).type('2\\14\\1967<br>', { delay: 100 }).options({ speed: 50 }) //17 characters in fist string
+
+    .type('<br><br><span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span><br>', { delay: 100 })
+    .type('<br><span class="color-blue">>&nbsp;</span>', { delay: 1000 }).options({ speed: 200 }).type('<span class="color-yellow">121</span><br>', { delay: 1000 }).options({ speed: 50 })
+    .go();
 
     // functions - popup windows
     const windows = [
