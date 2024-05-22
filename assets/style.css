@@ -77,8 +77,10 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0.05;
+    opacity: 0.03;
     filter: blur(0.6px);
+    z-index: 999;
+    pointer-events: none;
 }
 
 /* styles - cornerdata*/
@@ -179,7 +181,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     scrollbar-width: none;
-    padding-left: 150px; /* visuel center */
+    padding-left: 50px; /* visuel center */
 }
 
 #terminal::-webkit-scrollbar {
@@ -208,31 +210,43 @@ body {
 .windowIcon {
     position: absolute;
     top: 100px;
-    left: 100px;
-    width: 60px;
+    left: 20px;
+    width: auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
     gap: 20px;
+    align-items: center;
     cursor: pointer;
     user-select: none;
+    transform: translateY(-50%);
 }
 
 .windowIcon svg {
-    width: 100%;
+    width: 60px;
     height: auto;
 }
 
 .windowIcon p {
     white-space: nowrap;
+    color: var(--yellow);
 }
 
-.windowIcon:nth-of-type(2) {
-    top: 300px;
+/* styles - icon - position */
+.windowIcon[data-window="window-image"] {
+    top: calc(50svh - 200px);
 }
 
-.windowIcon:nth-of-type(3) {
-    top: 500px;
+.windowIcon[data-window="window-terminal"] {
+    top: calc(50svh - 100px);
+}
+
+.windowIcon[data-window="window-dashboard"] {
+    top: calc(50svh + 100px);
+}
+
+.windowIcon[data-window="window-system"] {
+    top: calc(50svh + 200px);
 }
 
 /* styles - window */
@@ -256,19 +270,24 @@ body {
     min-height: calc(var(--header-height) * 2);
 }
 
-#window1 {
+#window-image {
     top: 10%;
     left: 10%;
 }
 
-#window2 {
+#window-terminal {
     top: 20%;
     left: 20%;
 }
 
-#window3 {
+#window3-dashboard {
     top: 30%;
     left: 30%;
+}
+
+#window-system {
+    top: 40%;
+    left: 40%;
 }
 
 .window.show {
@@ -341,7 +360,7 @@ body {
 }
 
 .window::-webkit-scrollbar-thumb:vertical {
-    background-color: var(--yellow);
+    background-color: var(--grey);
     border-left: var(--border-size) solid var(--white);
 }
 
@@ -350,7 +369,7 @@ body {
 }
 
 .window::-webkit-scrollbar-thumb:horizontal {
-    background-color: var(--yellow);
+    background-color: var(--grey);
     border-top: var(--border-size) solid var(--white);
 }
 
