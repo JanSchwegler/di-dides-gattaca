@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //startAddingLines();
 
     // TypeIt test / 46 characters per line
-    new TypeIt('#terminal-content', {
+    new TypeIt('#terminal-content p', {
         cursorChar: "_",
         waitUntilVisible: true
     })
