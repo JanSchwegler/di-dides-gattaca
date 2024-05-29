@@ -105,7 +105,12 @@ let publicIp;
 let user = false;
 let startTime = new Date().getTime();
 
+// variables - storyline
+let chapter1Done = false;
+let chapter2Done = false;
+
 // variables - elements
+let terminalEmptyHtml;
 let bgCanvas;
 let bgCanvasCtx;
 let cdMouse;
@@ -119,6 +124,7 @@ let cdIp;
 // on load
 document.addEventListener('DOMContentLoaded', function () {
     // get elements
+    terminalEmptyHtml = document.getElementById('terminal').innerHTML;
     cdMouse = document.getElementById('cd-mouse');
     cdTime = document.getElementById('cd-time');
     cdIp = document.getElementById('cd-ip');
@@ -233,11 +239,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
                 publicIp = data.ip;
                 cdIp.innerHTML = publicIp;
-                return publicIp;
             } catch (error) {
                 publicIp = "147.88.201.117";
-                console.error("Error");
-                return publicIp;
             }
         }
     }
@@ -315,31 +318,49 @@ document.addEventListener('DOMContentLoaded', function () {
     //startAddingLines();
 
 
-    // console storyline
+    // terminal storyline
     /*
     details:
     - Library: TypeIt (https://typeitjs.com/)
     - Characters per line: 46
     */
 
-    setTimeout(() => {
-        consoleChapter1();
-    }, 10000);
+    function hideCursor(chapter) {
+        if (chapter) {
+            document.querySelector('#terminal-content p.' + chapter + ' .ti-cursor').style.display = 'none';
+        }
+    }
     // chapter 1 - booting up
-    function consoleChapter1() {
+    let chapter1 = new TypeIt('#terminal-content p.chapter1', {
+        afterComplete: () => {
+            chapter1Done = true;
+            main();
+        },
+        cursorChar: "_",
+        waitUntilVisible: true,
+        speed: 80
+    })
+    .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
+    .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
+    .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
+    .break().exec(() => scrollOneLineDown())
+    .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
+    .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
+    .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000);
+    // chapter 2 - user information
+    let chapter2;
+    function handleChapter2() {
         fetchPublicIp().then(() => {
-            new TypeIt('#terminal-content p', {
+            hideCursor('chapter1');
+            chapter2 = new TypeIt('#terminal-content p.chapter2', {
+                afterComplete: () => {
+                    chapter2Done = true;
+                    main();
+                },
                 cursorChar: "_",
                 waitUntilVisible: true,
                 speed: 80
             })
-            .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
-            .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
-            .break().exec(() => scrollOneLineDown())
-            .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
-            .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
-            .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000)
             .break().exec(() => scrollOneLineDown())
             .type('Startup Time: <span class="color-yellow">' + getTimeDifference() + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
             .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
@@ -373,6 +394,36 @@ document.addEventListener('DOMContentLoaded', function () {
             .go();
         });
     }
+    // functions - main
+    function main() {
+        if (!user) {
+            if (!chapter1Done) {
+                chapter1.go();
+            } else if (!chapter2Done) {
+                handleChapter2();
+            } else { // reset
+                resetContent();
+            }
+        }
+    }
+    main();
+    function resetContent() {
+        chapter1Done = false;
+        chapter2Done = false;
+        chapter1.reset();
+        chapter2.reset();
+        //document.getElementById('terminal').innerHTML = terminalEmptyHtml;
+        setTimeout(() => {
+            main();
+        }, 1000);
+    }
+
+    document.querySelector('#terminal .input-text').addEventListener('keydown', (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            console.log("enter");
+        }
+    });
 
 
     // functions - popup windows
