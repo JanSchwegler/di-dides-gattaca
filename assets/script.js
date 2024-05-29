@@ -19,7 +19,9 @@ class PopupWindow {
         this.windowElement.querySelector('.close').addEventListener('click', () => this.closeWindow());
         this.windowElement.querySelector('.header').addEventListener('mousedown', (e) => this.startDrag(e));
         this.windowElement.addEventListener('mousedown', () => this.focusWindow());
-        this.iconElement.addEventListener('click', () => this.openWindow());
+        if (this.iconElement) {
+            this.iconElement.addEventListener('click', () => this.openWindow());
+        }
     }
 
     startDrag(e) {
@@ -101,6 +103,7 @@ let mouseY;
 // variables - global
 let publicIp;
 let user = false;
+let startTime = new Date().getTime();
 
 // variables - elements
 let bgCanvas;
@@ -198,6 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateNoise();
 
 
+
     // functions - cd time
     async function updateTime() {
         let currentTime = new Date();
@@ -207,19 +211,38 @@ document.addEventListener('DOMContentLoaded', function () {
     updateTime();
     setInterval(updateTime, 1000);
 
-    
+
+
+    // functions - time difference
+    function getTimeDifference() {
+        let currentTime = new Date().getTime();
+        let difference = currentTime - startTime;
+        let seconds = Math.floor(difference / 1000);
+        let minutes = Math.floor(seconds / 60);
+        let hours = Math.floor(minutes / 60);
+        let time = `${String(hours % 24).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        return time;
+    }
+
+
+    // functions - public ip
     async function fetchPublicIp() {
-        try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            publicIp = data.ip;
-            cdIp.innerHTML = publicIp;
-        } catch (error) {
-            publicIp = "147.88.201.117";
+        if (!publicIp) {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                publicIp = data.ip;
+                cdIp.innerHTML = publicIp;
+                return publicIp;
+            } catch (error) {
+                publicIp = "147.88.201.117";
+                console.error("Error");
+                return publicIp;
+            }
         }
-        consoleChapter1();
     }
     fetchPublicIp();
+
 
 
     // new terminal line
@@ -299,63 +322,76 @@ document.addEventListener('DOMContentLoaded', function () {
     - Characters per line: 46
     */
 
+    setTimeout(() => {
+        consoleChapter1();
+    }, 10000);
     // chapter 1 - booting up
     function consoleChapter1() {
-        new TypeIt('#terminal-content p', {
-            cursorChar: "_",
-            waitUntilVisible: true,
-            speed: 80
-        })
-        .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
-        .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
-        .break().exec(() => scrollOneLineDown())
-        .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
-        .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
-        .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000)
-        .break().exec(() => scrollOneLineDown())
-        .type('Startup Time: <span class="color-yellow">0:00:07</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('IP: <span class="color-yellow">' + publicIp + '</span>').break().exec(() => scrollOneLineDown()).pause(1000)
-        .break().exec(() => scrollOneLineDown())
-        .type('<span class="color-green">Checking </span>hardware integrity...').break().exec(() => scrollOneLineDown()).pause(3000)
-        .type('<span class="color-green">Loading </span>kernal modules...').break().exec(() => scrollOneLineDown()).pause(5000)
-        .type('<span class="color-green">Verifying </span>network connection...').break().exec(() => scrollOneLineDown()).pause(500)
-        .type('<span class="color-green">Starting </span>user interface...').break().exec(() => scrollOneLineDown()).pause(2000)
-        .break().exec(() => scrollOneLineDown())
-        .type('<span class="color-green">Loaded </span>mouseUp ........................... <span class="color-yellow">53%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Loaded </span>keyboardKeydown1 .................. <span class="color-yellow">58%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Loaded </span>keyboardKeydown2 .................. <span class="color-yellow">63%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Loaded </span>keyboardKeydown3 .................. <span class="color-yellow">68%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Loaded </span>keyboardKeydown4 .................. <span class="color-yellow">74%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Loaded </span>keyboardKeydown5 .................. <span class="color-yellow">79%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Loaded </span>keyboardKeydown ................... <span class="color-yellow">84%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Loaded </span>startup ........................... <span class="color-yellow">89%</span>').break().exec(() => scrollOneLineDown()).pause(1000)
-        .break().exec(() => scrollOneLineDown())
-        .break().exec(() => scrollOneLineDown())
-        .type('<span class="color-blue">PLEASE ENTER YOUR INFORMATION:</span>').break().exec(() => scrollOneLineDown()).pause(100)
-        .break().exec(() => scrollOneLineDown())
-        .type('First Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Vincent Anton').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-        .type('Last Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Freeman').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-        .type('Date of Birth:<span class="color-blue">&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('2\\14\\1967').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-        .break().exec(() => scrollOneLineDown())
-        .break().exec(() => scrollOneLineDown())
-        .type('<span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span>').break().exec(() => scrollOneLineDown()).pause(100)
-        .break().exec(() => scrollOneLineDown())
-        .type('<span class="color-blue">>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('<span class="color-yellow">121</span>').break().exec(() => scrollOneLineDown()).pause(1000).options({ speed: 50 })
-        .go();
+        fetchPublicIp().then(() => {
+            new TypeIt('#terminal-content p', {
+                cursorChar: "_",
+                waitUntilVisible: true,
+                speed: 80
+            })
+            .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
+            .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
+            .break().exec(() => scrollOneLineDown())
+            .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
+            .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
+            .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000)
+            .break().exec(() => scrollOneLineDown())
+            .type('Startup Time: <span class="color-yellow">' + getTimeDifference() + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('IP: <span class="color-yellow">' + publicIp + '</span>').break().exec(() => scrollOneLineDown()).pause(1000)
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-green">Checking </span>hardware integrity...').break().exec(() => scrollOneLineDown()).pause(3000)
+            .type('<span class="color-green">Loading </span>kernal modules...').break().exec(() => scrollOneLineDown()).pause(5000)
+            .type('<span class="color-green">Verifying </span>network connection...').break().exec(() => scrollOneLineDown()).pause(500)
+            .type('<span class="color-green">Starting </span>user interface...').break().exec(() => scrollOneLineDown()).pause(2000)
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-green">Loaded </span>mouseUp ........................... <span class="color-yellow">53%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown1 .................. <span class="color-yellow">58%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown2 .................. <span class="color-yellow">63%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown3 .................. <span class="color-yellow">68%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown4 .................. <span class="color-yellow">74%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown5 .................. <span class="color-yellow">79%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown ................... <span class="color-yellow">84%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>startup ........................... <span class="color-yellow">89%</span>').break().exec(() => scrollOneLineDown()).pause(1000)
+            .break().exec(() => scrollOneLineDown())
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-blue">PLEASE ENTER YOUR INFORMATION:</span>').break().exec(() => scrollOneLineDown()).pause(100)
+            .break().exec(() => scrollOneLineDown())
+            .type('First Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Vincent Anton').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
+            .type('Last Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Freeman').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
+            .type('Date of Birth:<span class="color-blue">&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('2\\14\\1967').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
+            .break().exec(() => scrollOneLineDown())
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span>').break().exec(() => scrollOneLineDown()).pause(100)
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-blue">>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('<span class="color-yellow">121</span>').break().exec(() => scrollOneLineDown()).pause(1000).options({ speed: 50 })
+            .go();
+        });
     }
 
 
     // functions - popup windows
-    const windows = [];
+    let windows = [];
 
     document.querySelectorAll('.window').forEach((window, index) => {
-        windows[window.id] = new PopupWindow(
-            window,
-            document.querySelector(`.windowIcon[data-window="${window.id}"]`)
-        );
+        const windowElement = window;
+        const iconElement = document.querySelector(`.windowIcon[data-window="${window.id}"]`);
+        const instance = new PopupWindow(windowElement, iconElement);
+        windows[window.id] = instance;
     });
+    /* example open and close windows
+    console.log(windows);
+    windows['window-image'].openWindow();
+    setTimeout(() => {
+        windows['window-image'].closeWindow();
+    }, 5000);
+    */
+
 
     function movePopupWindows() {
         document.querySelectorAll('.window').forEach(window => {
