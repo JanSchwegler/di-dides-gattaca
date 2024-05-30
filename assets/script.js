@@ -260,65 +260,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         document.getElementById('terminal').scrollTop += lineHeight;
     }
-    /* Old Terminal Code
-    function getLineHeight() {
-        let firstPElement = document.querySelector('#terminal .terminal-line');
-        if (firstPElement && lineHeight === 0) {
-            lineHeight = firstPElement.offsetHeight;
-        }
-    }
-    getLineHeight();
-    function typeText(element, text, delay) {
-        let index = 0;
-        let typing = setInterval(() => {
-            if (index < text.length) {
-                element.textContent += text.charAt(index);
-                index++;
-            } else {
-                clearInterval(typing);
-            }
-        }, delay);
-    }
-    function addTerminalLine(content) {
-        let terminal = document.getElementById('terminal-content');
-        let newLine = document.createElement('div');
-        newLine.classList.add('terminal-line');
-        
-        let pElement1 = document.createElement('p');
-        let pElement2 = document.createElement('p');
-        
-        newLine.appendChild(pElement1);
-        newLine.appendChild(pElement2);
-        
-        terminal.appendChild(newLine);
-        
-        typeText(pElement1, content, 50); // Adjust the delay as needed
-        
-        // Add a delay before starting typing the second line
-        setTimeout(() => {
-            //typeText(pElement2, content, 50); // Adjust the delay as needed
-        }, 500); // Adjust the delay as needed
-
-        // scroll one line down
-        if (lineHeight === 0) {
-            getLineHeight();
-        }
-        document.getElementById('terminal').scrollTop += lineHeight;
-    }
-    function startAddingLines() {
-        let intervalId = setInterval(() => {
-            let terminal = document.getElementById('terminal');
-            let lines = terminal.querySelectorAll('.terminal-line');
-            
-            addTerminalLine('New line ' + (lines.length + 1));
-            
-            if (lines.length >= 49) {
-                clearInterval(intervalId);
-            }
-        }, 500);
-    }
-    //startAddingLines();
-    */
 
     // functions - terminal text element
     function createTextElement(chapter) {
