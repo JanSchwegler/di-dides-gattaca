@@ -132,48 +132,6 @@ body {
     right: var(--border-cornerdata);
 }
 
-/* backup skew cornerdata 
-.cornerdata:nth-of-type(1) {
-    transform: perspective(500px) skew(-5deg, -5deg) rotateY(-5deg);
-    transform-origin: right top;
-}
-
-.cornerdata:nth-of-type(2) {
-    right: var(--border-cornerdata);
-    left: auto;
-    transform: perspective(500px) skew(5deg, 5deg) rotateY(5deg);
-    transform-origin: left top;
-}
-
-.cornerdata:nth-of-type(3) {
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.cornerdata:nth-of-type(4) {
-    right: var(--border-cornerdata);
-    left: auto;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.cornerdata:nth-of-type(5) {
-    top: auto;
-    bottom: var(--border-cornerdata);
-    transform: perspective(500px) skew(5deg, 5deg) rotateY(-5deg);
-    transform-origin: right bottom;
-}
-
-.cornerdata:nth-of-type(6) {
-    top: auto;
-    left: auto;
-    bottom: var(--border-cornerdata);
-    right: var(--border-cornerdata);
-    transform: perspective(500px) skew(-5deg, -5deg) rotateY(5deg);
-    transform-origin: left bottom;
-}
-*/
-
 /* styles - terminal */
 #terminal {
     width: 80vw;
