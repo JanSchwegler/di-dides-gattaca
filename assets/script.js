@@ -102,12 +102,13 @@ let mouseY;
 
 // variables - global
 let publicIp;
-let user = false;
 let startTime = new Date().getTime();
-
-// variables - storyline
-let chapter1Done = false;
-let chapter2Done = false;
+let chapterProgress = [
+    { user: false }, // user login
+    false, // chapter 1
+    true, // chapter 2
+    false, // chapter 3
+];
 
 // variables - elements
 let terminalEmptyHtml;
@@ -324,6 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let textElement = document.createElement('p');
         textElement.className = chapter;
         document.querySelector('#terminal-content').appendChild(textElement);
+
         return textElement;
     }
 
@@ -367,7 +369,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (inputText) {
                         spanInputText.removeAttribute('contenteditable');
                         spanInputText.removeEventListener('keydown', handler);
-                        console.log(inputText);
                         resolve(inputText);
                     }
                 }
@@ -395,22 +396,26 @@ document.addEventListener('DOMContentLoaded', function () {
     - Characters per line: 46
     */
     // chapter 1 - booting up
-    let chapter1 = new TypeIt(createTextElement('chapter1'), {
-        afterComplete: () => {
-            chapter1Done = true;
-            main();
-        },
-        cursorChar: "_",
-        waitUntilVisible: true,
-        speed: 80
-    })
-    .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
-    .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
-    .break().exec(() => scrollOneLineDown())
-    .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
-    .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
-    .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000);
+    let chapter1;
+    function handleChapter1() {
+        chapter1 = new TypeIt(createTextElement('chapter1'), {
+            afterComplete: () => {
+                chapterProgress[1] = true;
+                main();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 80
+        })
+        .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
+        .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
+        .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
+        .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000)
+        .go();
+    }
     // chapter 2 - user information
     let chapter2;
     function handleChapter2() {
@@ -419,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             chapter2 = new TypeIt(createTextElement('chapter2'), {
                 afterComplete: () => {
-                    chapter2Done = true;
+                    chapterProgress[2] = true;
                     main();
                 },
                 cursorChar: "_",
@@ -456,6 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .type('<span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span>').break().exec(() => scrollOneLineDown()).pause(100)
             .break().exec(() => scrollOneLineDown())
             .type('<span class="color-blue">>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('<span class="color-yellow">121</span>').break().exec(() => scrollOneLineDown()).pause(1000).options({ speed: 50 })
+            .break().exec(() => scrollOneLineDown() + hideCursor("chapter2"))
             .go();
         });
     }
@@ -481,29 +487,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // functions - main
     function main() {
-        if (!user) {
-            if (!chapter1Done) {
-                chapter1.go();
-            } else if (!chapter2Done) {
+        if (!chapterProgress['user']) {
+
+            if (!chapterProgress[1]) { // chapter 1
+
+                handleChapter1();
+
+            } else if (!chapterProgress[2]) { // chapter 2
+
                 handleChapter2();
-            } else if (true) {
+
+            } else if (!chapterProgress[3]) { // chapter 3
+
                 createInputElement("chapter3").then(input => {
                     let inputName = input;
-                    console.log('Input received:', inputName);
-                    user = true;
+                    chapterProgress[3] = true;
+                    main();
                 });
+
             } else { // reset
-                //resetContent();
+
+                resetContent(chapters = [chapter1, chapter2]);
+
             }
         }
     }
     main();
-    function resetContent() {
-        chapter1Done = false;
-        chapter2Done = false;
-        chapter1.reset();
-        chapter2.reset();
-        //document.getElementById('terminal').innerHTML = terminalEmptyHtml;
+    function resetContent(chapters) {
+        // reset progress
+        for (let i = 0; i < chapterProgress.length; i++) {
+            chapterProgress[i] = false;
+        }
+
+        // reset typeIt instances
+        chapters.forEach(chapter => {
+            if (chapter) {
+                chapter.reset();
+            }
+        });
+
+        // reset terminal content
+        document.getElementById('terminal').innerHTML = terminalEmptyHtml;
+
         setTimeout(() => {
             main();
         }, 1000);
