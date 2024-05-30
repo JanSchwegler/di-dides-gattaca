@@ -9,8 +9,19 @@
     <script src="assets/script.js" defer></script>
 </head>
 <body>
+    <div id="bgGrid"></div>
     <canvas id="bgNoise"></canvas>
-    <p class="cornerdata">GTCA OS</p>
+    <p class="cornerdata">GTCA
+        <span id="systemInfo">
+            System Initialization Complete<br>
+            <span id="systemInfoUser">User: </span><br>
+            <span id="systemInfoStartup">Startup: 00:00:00</span><br>
+            <span id="systemInfoUptime">Uptime: 00:00:00</span><br>
+            <span id="systemInfoCpu">CPU usage: </span><br>
+            <span id="systemInfoMemory">Memory usage: </span><br>
+            <span id="systemInfoStorage">Storage usage: 34.7% | 1.735 GB</span>
+        </span>
+    </p>
     <p class="cornerdata">Version 10.0.22631.3447</p>
     <p id="cd-time" class="cornerdata"></p>
     <p id="cd-ip" class="cornerdata"></p>

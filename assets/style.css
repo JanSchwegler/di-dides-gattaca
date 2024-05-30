@@ -75,6 +75,20 @@ body {
     cursor: url('images/cursor.svg'), auto;
 }
 
+#bgGrid {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: url('images/cursor.svg');
+    background-size: auto 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.02;
+}
+
 #bgNoise {
     width: 100%;
     height: 100%;
@@ -88,14 +102,17 @@ body {
 }
 
 /* styles - cornerdata*/
+.cornerdata, .cornerdata span {
+    white-space: nowrap;
+    color: var(--grey);
+    font-size: 0.8rem;
+}
+
 .cornerdata {
     --border-cornerdata: 20px;
     position: absolute;
     top: var(--border-cornerdata);
     left: var(--border-cornerdata);
-    white-space: nowrap;
-    color: var(--grey);
-    font-size: 0.8rem;
 }
 
 .cornerdata:nth-of-type(1) {
@@ -130,6 +147,11 @@ body {
     left: auto;
     bottom: var(--border-cornerdata);
     right: var(--border-cornerdata);
+}
+
+.cornerdata #systemInfo {
+    display: block;
+    margin-top: 20px;
 }
 
 /* styles - terminal */
@@ -243,6 +265,7 @@ body {
     resize: both;
     pointer-events: none;
     min-height: calc(var(--header-height) * 2);
+    filter: drop-shadow(0 0 30px rgba(35, 35, 35, 0.6));
 }
 
 #window-image {

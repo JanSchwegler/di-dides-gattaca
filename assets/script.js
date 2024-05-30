@@ -117,6 +117,11 @@ let bgCanvasCtx;
 let cdMouse;
 let cdTime
 let cdIp;
+let cdSystemInfo;
+let cdUptime;
+let cdCpu;
+let cdMemory;
+let cdStorage;
 
 
 
@@ -131,6 +136,11 @@ document.addEventListener('DOMContentLoaded', function () {
     cdIp = document.getElementById('cd-ip');
     bgCanvas = document.getElementById('bgNoise');
     bgCanvasCtx = bgCanvas.getContext('2d');
+    cdSystemInfo = document.querySelector('#systemInfo');
+    cdUptime = cdSystemInfo.querySelector('#systemInfoUptime');
+    cdCpu = cdSystemInfo.querySelector('#systemInfoCpu');
+    cdMemory = cdSystemInfo.querySelector('#systemInfoMemory');
+    cdStorage = cdSystemInfo.querySelector('#systemInfoStorage');
 
 
 
@@ -336,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function () {
     details:
     - Library: TypeIt (https://typeitjs.com/)
     - Characters per line: 46
-    
+
     - Text chapter building:
         - chapter var
         - hide curser?
@@ -463,6 +473,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 resetContent(chapters = [chapter1, chapter2]);
 
             }
+        } else {
+            // show icons
+            // show systeminfo
+            // hide console
         }
     }
     main();
@@ -542,4 +556,41 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     movePopupWindows();
+
+
+    // functions - dashboard system info
+    function initSystemInfo() {
+        // user
+        cdSystemInfo.querySelector('#systemInfoUser').textContent = "User: " + "Vincent Anton Freeman";
+        // startup time
+        let currentTime = new Date();
+        let formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
+        cdSystemInfo.querySelector('#systemInfoStartup').textContent = "Startup: " + formattedTime;
+    }
+    initSystemInfo();
+    
+
+    // functions - dashboard system info background
+    async function updateSystemInfo() {
+        // uptime
+        let uptime = getTimeDifference();
+        // cpu
+        let cpuUsage = parseInt(cdCpu.textContent.match(/\d+/));
+        if (isNaN(cpuUsage)) {
+            cpuUsage = 50;
+        }
+        cpuUsage = Math.max(4.1657, Math.min(98.2916, (cpuUsage + Math.random() * 15 - 7).toFixed(4)));
+        // memory
+        let memoryUsage = parseInt(cdMemory.textContent.match(/\d+/));
+        if (isNaN(memoryUsage)) {
+            memoryUsage = 25;
+        }
+        memoryUsage = Math.max(8.1654, Math.min(83.9513, (memoryUsage + Math.random() * 6 - 3).toFixed(4)));
+
+        cdUptime.textContent = `Uptime: ${uptime}`;
+        cdCpu.textContent = `CPU: ${cpuUsage}%`;
+        cdMemory.textContent = `Memory: ${memoryUsage}%`;
+    }
+    updateSystemInfo();
+    setInterval(updateSystemInfo, 1000);
 });
