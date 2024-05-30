@@ -64,6 +64,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, section, main, div, li, figcaption {
     color: var(--grey);
 }
 
+.blur {
+    filter: blur(5px);
+}
+
 body {
     height: 100svh;
     width: 100%;
@@ -216,6 +220,7 @@ body {
 #terminal .input .input-text {
     flex-grow: 1;
     outline: none;
+    cursor: url('images/cursorText.svg') 0 17, auto;
 }
 
 /* styles - icon */
@@ -229,7 +234,7 @@ body {
     justify-content: space-between;
     gap: 20px;
     align-items: center;
-    cursor: pointer;
+    cursor: url('images/cursorPointer.svg') 12 0, auto;
     user-select: none;
     transform: translateY(-50%);
 }
@@ -319,8 +324,12 @@ body {
     width: 100%;
     background-color: var(--black);
     border-bottom: var(--border-size) solid var(--white);
-    cursor: grab;
+    
     white-space: nowrap;
+}
+
+.window .header {
+    cursor: grab;
 }
 
 .window .title {
@@ -338,12 +347,12 @@ body {
     right: 0;
     padding: var(--header-space-top) 10px;
     color: var(--yellow);
-    cursor: pointer;
+    cursor: url('images/cursorPointer.svg') 12 0, auto;
     user-select: none;
 }
 
 .window .content {
-    cursor: initial;
+    cursor: url('images/cursor.svg'), auto;
     padding: 10px;
     min-height: calc(100% - (var(--header-height) * 2));
 }
@@ -353,7 +362,6 @@ body {
     bottom: 0;
     border-top: var(--border-size) solid var(--white);
     border-bottom: none;
-    cursor: inherit;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

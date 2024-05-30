@@ -248,8 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchPublicIp();
 
 
-
-    // new terminal line
+    // functions - terminal new line
     let lineHeight = 0;
     function scrollOneLineDown() {
         if (lineHeight === 0) {
@@ -261,6 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('terminal').scrollTop += lineHeight;
     }
 
+
     // functions - terminal text element
     function createTextElement(chapter) {
         let textElement = document.createElement('p');
@@ -269,6 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return textElement;
     }
+
 
     // functions - terminal input
     function createInputElement(chapter) {
@@ -335,6 +336,17 @@ document.addEventListener('DOMContentLoaded', function () {
     details:
     - Library: TypeIt (https://typeitjs.com/)
     - Characters per line: 46
+    
+    - Text chapter building:
+        - chapter var
+        - hide curser?
+        - new TypeIt instance
+
+    - chapers:
+        - chapter 1: booting up
+        - chapter 2: user information
+        - chapter 3: user input
+        - chapter 4: example
     */
     // chapter 1 - booting up
     let chapter1;
