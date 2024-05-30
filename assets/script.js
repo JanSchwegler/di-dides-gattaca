@@ -107,7 +107,7 @@ let startTime = new Date().getTime();
 
 // variables - storyline
 let chapter1Done = false;
-let chapter2Done = true;
+let chapter2Done = false;
 
 // variables - elements
 let terminalEmptyHtml;
@@ -319,6 +319,14 @@ document.addEventListener('DOMContentLoaded', function () {
     //startAddingLines();
     */
 
+    // functions - terminal text element
+    function createTextElement(chapter) {
+        let textElement = document.createElement('p');
+        textElement.className = chapter;
+        document.querySelector('#terminal-content').appendChild(textElement);
+        return textElement;
+    }
+
     // functions - terminal input
     function createInputElement(chapter) {
         return new Promise((resolve) => {
@@ -335,6 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
             spanInputText.setAttribute('contenteditable', 'true');
     
             inputElement.append(spanBlue, spanInputText);
+            scrollOneLineDown();
     
             // append to chapter div
             let inputChapter = document.querySelector('#terminal-content div.' + chapter);
@@ -367,9 +376,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    // functions - terminal cursor
     function hideCursor(chapter) {
         if (chapter) {
-            document.querySelector('#terminal-content p.' + chapter + ' .ti-cursor').style.display = 'none';
+            let cursor = document.querySelector('#terminal-content p.' + chapter + ' .ti-cursor');
+            if (cursor) {
+                cursor.style.display = 'none';
+            }
         }
     }
     
@@ -382,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
     - Characters per line: 46
     */
     // chapter 1 - booting up
-    let chapter1 = new TypeIt('#terminal-content p.chapter1', {
+    let chapter1 = new TypeIt(createTextElement('chapter1'), {
         afterComplete: () => {
             chapter1Done = true;
             main();
@@ -403,7 +416,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function handleChapter2() {
         fetchPublicIp().then(() => {
             hideCursor('chapter1');
-            chapter2 = new TypeIt('#terminal-content p.chapter2', {
+
+            chapter2 = new TypeIt(createTextElement('chapter2'), {
                 afterComplete: () => {
                     chapter2Done = true;
                     main();
@@ -445,6 +459,26 @@ document.addEventListener('DOMContentLoaded', function () {
             .go();
         });
     }
+    // chapter 4 - example
+    let chapter4;
+    function handleChapter4() {
+        hideCursor('chapter3');
+
+        chapter4 = new TypeIt(createTextElement('chapter4'), {
+            afterComplete: () => {
+                chapter4Done = true;
+                main();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 80
+        })
+        .break().exec(() => scrollOneLineDown())
+        .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
+    }
+
+
+
     // functions - main
     function main() {
         if (!user) {
