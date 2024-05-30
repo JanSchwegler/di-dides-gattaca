@@ -102,13 +102,15 @@ let mouseY;
 
 // variables - global
 let publicIp;
-let startTime = new Date().getTime();
+let startTime = new Date();
 let chapterProgress = [
     { user: false }, // user login
     false, // chapter 1
     true, // chapter 2
     false, // chapter 3
 ];
+let cpuUsage = 50;
+let memoryUsage = 25;
 
 // variables - elements
 let terminalEmptyHtml;
@@ -219,27 +221,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    // functions - cd time
-    async function updateTime() {
+    // functions - current time
+    function getCurrentTime() {
         let currentTime = new Date();
         let formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
-        cdTime.textContent = formattedTime;
+        return formattedTime;
     }
-    updateTime();
-    setInterval(updateTime, 1000);
 
 
 
     // functions - time difference
     function getTimeDifference() {
-        let currentTime = new Date().getTime();
-        let difference = currentTime - startTime;
-        let seconds = Math.floor(difference / 1000);
-        let minutes = Math.floor(seconds / 60);
-        let hours = Math.floor(minutes / 60);
-        let time = `${String(hours % 24).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        let currentTime = new Date();
+        let difference = currentTime.getTime() - startTime.getTime(); // Calculate the time difference in milliseconds
+        let seconds = Math.floor(difference / 1000) % 60; // Get remaining seconds after dividing by 60
+        let minutes = Math.floor(difference / (1000 * 60)) % 60; // Get remaining minutes after dividing by 60
+        let hours = Math.floor(difference / (1000 * 60 * 60)); // Get remaining hours
+        let time = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         return time;
     }
+
+
+
+    // functions - CPU usage
+    function getCpuUsage() {
+        cpuUsage = Math.max(4.1657, Math.min(98.2916, (cpuUsage + Math.random() * 15 - 7).toFixed(4)));
+        return cpuUsage;
+    }
+
+
+
+    // functions - memory usage
+    function getMemoryUsage() {
+        memoryUsage = Math.max(8.1654, Math.min(83.9513, (memoryUsage + Math.random() * 6 - 3).toFixed(4)));
+        return memoryUsage;
+    }
+
+    
+
+    // functions - cd time
+    async function updateTime() {
+        cdTime.textContent = getCurrentTime();
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
 
 
     // functions - public ip
@@ -558,38 +584,34 @@ document.addEventListener('DOMContentLoaded', function () {
     movePopupWindows();
 
 
+
     // functions - dashboard system info
     function initSystemInfo() {
         // user
         cdSystemInfo.querySelector('#systemInfoUser').textContent = "User: " + "Vincent Anton Freeman";
         // startup time
-        let currentTime = new Date();
-        let formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
-        cdSystemInfo.querySelector('#systemInfoStartup').textContent = "Startup: " + formattedTime;
+        cdSystemInfo.querySelector('#systemInfoStartup').textContent = "Startup: " + startTime.toLocaleTimeString('en-US', {hour12: false});
+        // storage
+        let storagePercentage = (Math.random() * (36.6481 - 27.9426) + 27.9426).toFixed(1);
+        let storageTb = (5 / 100 * storagePercentage).toFixed(1);
+        cdStorage.textContent = "Storage: " + storagePercentage + " % | " + storageTb + " TB";
     }
     initSystemInfo();
-    
+
+
 
     // functions - dashboard system info background
     async function updateSystemInfo() {
         // uptime
         let uptime = getTimeDifference();
         // cpu
-        let cpuUsage = parseInt(cdCpu.textContent.match(/\d+/));
-        if (isNaN(cpuUsage)) {
-            cpuUsage = 50;
-        }
-        cpuUsage = Math.max(4.1657, Math.min(98.2916, (cpuUsage + Math.random() * 15 - 7).toFixed(4)));
+        let cpu = getCpuUsage();
         // memory
-        let memoryUsage = parseInt(cdMemory.textContent.match(/\d+/));
-        if (isNaN(memoryUsage)) {
-            memoryUsage = 25;
-        }
-        memoryUsage = Math.max(8.1654, Math.min(83.9513, (memoryUsage + Math.random() * 6 - 3).toFixed(4)));
+        let memory = getMemoryUsage();
 
         cdUptime.textContent = `Uptime: ${uptime}`;
-        cdCpu.textContent = `CPU: ${cpuUsage}%`;
-        cdMemory.textContent = `Memory: ${memoryUsage}%`;
+        cdCpu.textContent = `CPU: ${cpu}%`;
+        cdMemory.textContent = `Memory: ${memory}%`;
     }
     updateSystemInfo();
     setInterval(updateSystemInfo, 1000);
