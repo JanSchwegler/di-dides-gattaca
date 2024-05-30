@@ -352,6 +352,7 @@ body {
 
 .window .footer p {
     color: var(--grey);
+    font-size: 0.8rem;
 }
 
 /* styles - window - scrollbar */

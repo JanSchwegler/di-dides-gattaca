@@ -13,6 +13,7 @@ class PopupWindow {
         this.initialHeight = 0;
         
         this.init();
+        this.onMouseUp();
     }
 
     init() {
@@ -284,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchPublicIp();
 
 
+
     // functions - terminal new line
     let lineHeight = 0;
     function scrollOneLineDown() {
@@ -297,6 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     // functions - terminal text element
     function createTextElement(chapter) {
         let textElement = document.createElement('p');
@@ -305,6 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return textElement;
     }
+
 
 
     // functions - terminal input
@@ -353,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
 
 
     // functions - terminal cursor
@@ -528,14 +533,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     // functions - popup windows
     let windows = [];
 
     document.querySelectorAll('.window').forEach((window, index) => {
+        // create window instances
         const windowElement = window;
         const iconElement = document.querySelector(`.windowIcon[data-window="${window.id}"]`);
         const instance = new PopupWindow(windowElement, iconElement);
         windows[window.id] = instance;
+
+        // create resize observer
+        const resizeObserver = new ResizeObserver(entries => {
+            entries.forEach(entry => {
+                window.querySelector('.footer p.windowSize').textContent = `${entry.contentRect.width} x ${entry.contentRect.height}`;
+            });
+        });
+        resizeObserver.observe(window);
     });
     /* example open and close windows
     console.log(windows);
@@ -544,6 +559,9 @@ document.addEventListener('DOMContentLoaded', function () {
         windows['window-image'].closeWindow();
     }, 5000);
     */
+
+      
+
 
 
     function movePopupWindows() {
