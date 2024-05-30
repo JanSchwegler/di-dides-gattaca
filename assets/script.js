@@ -112,6 +112,7 @@ let chapterProgress = [
 ];
 let cpuUsage = 50;
 let memoryUsage = 25;
+let geoLocationApi = false;
 
 // variables - elements
 let terminalEmptyHtml;
@@ -266,6 +267,74 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     updateTime();
     setInterval(updateTime, 1000);
+
+
+
+    // functions - geo location
+    function getGeolocationDetails() {
+        return getGeolocation()
+            .then(position => {
+                const { latitude, longitude } = position.coords;
+                return getLocationDetails(latitude, longitude);
+            })
+            .catch(handleError);
+    }
+    function getGeolocation() {
+        return new Promise((resolve, reject) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            } else {
+                reject();
+            }
+        });
+    }
+    function getLocationDetails(latitude, longitude) {
+        return new Promise((resolve, reject) => {
+            if (!geoLocationApi) {
+                let country = 'Schweiz';
+                let city = 'Risch-Rotkreuz';
+                resolve({ latitude, longitude, country, city });
+            }
+
+            // OpenCage Data API
+            const apiKey = 'c0ffd54e3851460797b4653b24917346';
+            const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+    
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const location = data.results[0];
+                        const country = location.components.country;
+                        const city = location.components.city || location.components.town || location.components.village;
+    
+                        resolve({ latitude, longitude, country, city });
+                    } else {
+                        reject();
+                    }
+                })
+                .catch(() => reject());
+        });
+    }
+    function handleError() {
+        console.error('An error occurred');
+    }
+    // get geolocation and display in window
+    getGeolocationDetails().then(data => {
+        let coordinates = document.createElement('p');
+        let country = document.createElement('p');
+        let city = document.createElement('p');
+
+        coordinates.textContent = `Coordinates: ${data.latitude} | ${data.longitude}`;
+        country.textContent = `Country: ${data.country}`;
+        city.textContent = `City: ${data.city}`;
+
+        document.querySelector('#window-geolocation .content').appendChild(coordinates);
+        document.querySelector('#window-geolocation .content').appendChild(country);
+        document.querySelector('#window-geolocation .content').appendChild(city);
+
+        windows['window-geolocation'].openWindow();
+    }).catch(handleError);
 
 
 

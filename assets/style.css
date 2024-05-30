@@ -288,6 +288,13 @@ body {
     left: 40%;
 }
 
+#window-geolocation {
+    width: 400px;
+    height: 200px;
+    top: 50px;
+    left: 60%;
+}
+
 .window.show {
     opacity: 1;
     transform: scale(1);
