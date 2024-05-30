@@ -107,7 +107,7 @@ let startTime = new Date().getTime();
 
 // variables - storyline
 let chapter1Done = false;
-let chapter2Done = false;
+let chapter2Done = true;
 
 // variables - elements
 let terminalEmptyHtml;
@@ -259,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         document.getElementById('terminal').scrollTop += lineHeight;
     }
+    /* Old Terminal Code
     function getLineHeight() {
         let firstPElement = document.querySelector('#terminal .terminal-line');
         if (firstPElement && lineHeight === 0) {
@@ -316,7 +317,63 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 500);
     }
     //startAddingLines();
+    */
 
+    // functions - terminal input
+    function createInputElement(chapter) {
+        return new Promise((resolve) => {
+            // create input element
+            let inputElement = document.createElement('p');
+            inputElement.className = 'input';
+    
+            let spanBlue = document.createElement('span');
+            spanBlue.className = 'color-blue';
+            spanBlue.innerHTML = '>&nbsp;';
+    
+            let spanInputText = document.createElement('span');
+            spanInputText.className = 'input-text';
+            spanInputText.setAttribute('contenteditable', 'true');
+    
+            inputElement.append(spanBlue, spanInputText);
+    
+            // append to chapter div
+            let inputChapter = document.querySelector('#terminal-content div.' + chapter);
+            if (inputChapter) {
+                inputChapter.appendChild(inputElement);
+            } else {
+                inputChapter = document.createElement('div');
+                inputChapter.className = chapter;
+                document.querySelector('#terminal-content').appendChild(inputChapter);
+                inputChapter.appendChild(inputElement);
+            }
+    
+            // set focus
+            spanInputText.focus();
+    
+            // event listener
+            spanInputText.addEventListener('keydown', function handler(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    let inputText = spanInputText.textContent;
+                    if (inputText) {
+                        spanInputText.removeAttribute('contenteditable');
+                        spanInputText.removeEventListener('keydown', handler);
+                        console.log(inputText);
+                        resolve(inputText);
+                    }
+                }
+            });
+        });
+    }
+
+
+    function hideCursor(chapter) {
+        if (chapter) {
+            document.querySelector('#terminal-content p.' + chapter + ' .ti-cursor').style.display = 'none';
+        }
+    }
+    
+    
 
     // terminal storyline
     /*
@@ -324,12 +381,6 @@ document.addEventListener('DOMContentLoaded', function () {
     - Library: TypeIt (https://typeitjs.com/)
     - Characters per line: 46
     */
-
-    function hideCursor(chapter) {
-        if (chapter) {
-            document.querySelector('#terminal-content p.' + chapter + ' .ti-cursor').style.display = 'none';
-        }
-    }
     // chapter 1 - booting up
     let chapter1 = new TypeIt('#terminal-content p.chapter1', {
         afterComplete: () => {
@@ -401,8 +452,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 chapter1.go();
             } else if (!chapter2Done) {
                 handleChapter2();
+            } else if (true) {
+                createInputElement("chapter3").then(input => {
+                    let inputName = input;
+                    console.log('Input received:', inputName);
+                    user = true;
+                });
             } else { // reset
-                resetContent();
+                //resetContent();
             }
         }
     }
@@ -417,13 +474,6 @@ document.addEventListener('DOMContentLoaded', function () {
             main();
         }, 1000);
     }
-
-    document.querySelector('#terminal .input-text').addEventListener('keydown', (event) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            console.log("enter");
-        }
-    });
 
 
     // functions - popup windows
