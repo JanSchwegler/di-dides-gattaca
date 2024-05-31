@@ -13,13 +13,16 @@ class PopupWindow {
         this.initialHeight = 0;
         
         this.init();
+        this.onMouseUp();
     }
 
     init() {
         this.windowElement.querySelector('.close').addEventListener('click', () => this.closeWindow());
         this.windowElement.querySelector('.header').addEventListener('mousedown', (e) => this.startDrag(e));
         this.windowElement.addEventListener('mousedown', () => this.focusWindow());
-        this.iconElement.addEventListener('click', () => this.openWindow());
+        if (this.iconElement) {
+            this.iconElement.addEventListener('click', () => this.openWindow());
+        }
     }
 
     startDrag(e) {
@@ -91,19 +94,38 @@ class PopupWindow {
 }
 
 // variables
-// variables - sizing and positioning
+// variables - sizing / positioning
 let screenWidth = document.documentElement.clientWidth || window.innerWidth;
 let screenHeight = document.documentElement.clientHeight || window.innerHeight;
 let scrollPos = window.scrollY || window.pageYOffset;
 let mouseX;
 let mouseY;
 
+// variables - global
+let publicIp;
+let startTime = new Date();
+let chapterProgress = [
+    { user: false }, // user login
+    false, // chapter 1
+    true, // chapter 2
+    false, // chapter 3
+];
+let cpuUsage = 50;
+let memoryUsage = 25;
+let geoLocationApi = false;
+
 // variables - elements
+let terminalEmptyHtml;
 let bgCanvas;
 let bgCanvasCtx;
 let cdMouse;
 let cdTime
 let cdIp;
+let cdSystemInfo;
+let cdUptime;
+let cdCpu;
+let cdMemory;
+let cdStorage;
 
 
 
@@ -112,23 +134,17 @@ let cdIp;
 // on load
 document.addEventListener('DOMContentLoaded', function () {
     // get elements
+    terminalEmptyHtml = document.getElementById('terminal').innerHTML;
     cdMouse = document.getElementById('cd-mouse');
     cdTime = document.getElementById('cd-time');
     cdIp = document.getElementById('cd-ip');
     bgCanvas = document.getElementById('bgNoise');
     bgCanvasCtx = bgCanvas.getContext('2d');
-
-
-
-
-
-    // initials
-    // cornerdata ip
-    fetch('https://api.ipify.org?format=json')
-    .then(response => response.json())
-    .then(data => {
-        cdIp.innerHTML = data.ip;
-    });
+    cdSystemInfo = document.querySelector('#systemInfo');
+    cdUptime = cdSystemInfo.querySelector('#systemInfoUptime');
+    cdCpu = cdSystemInfo.querySelector('#systemInfoCpu');
+    cdMemory = cdSystemInfo.querySelector('#systemInfoMemory');
+    cdStorage = cdSystemInfo.querySelector('#systemInfoStorage');
 
 
 
@@ -206,17 +222,140 @@ document.addEventListener('DOMContentLoaded', function () {
     updateNoise();
 
 
-    // functions - cd time
-    function updateTime() {
+
+    // functions - current time
+    function getCurrentTime() {
         let currentTime = new Date();
         let formattedTime = currentTime.toLocaleTimeString('en-US', {hour12: false});
-        cdTime.textContent = formattedTime;
+        return formattedTime;
+    }
+
+
+
+    // functions - time difference
+    function getTimeDifference() {
+        let currentTime = new Date();
+        let difference = currentTime.getTime() - startTime.getTime(); // Calculate the time difference in milliseconds
+        let seconds = Math.floor(difference / 1000) % 60; // Get remaining seconds after dividing by 60
+        let minutes = Math.floor(difference / (1000 * 60)) % 60; // Get remaining minutes after dividing by 60
+        let hours = Math.floor(difference / (1000 * 60 * 60)); // Get remaining hours
+        let time = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        return time;
+    }
+
+
+
+    // functions - CPU usage
+    function getCpuUsage() {
+        cpuUsage = Math.max(4.1657, Math.min(98.2916, (cpuUsage + Math.random() * 15 - 7).toFixed(4)));
+        return cpuUsage;
+    }
+
+
+
+    // functions - memory usage
+    function getMemoryUsage() {
+        memoryUsage = Math.max(8.1654, Math.min(83.9513, (memoryUsage + Math.random() * 6 - 3).toFixed(4)));
+        return memoryUsage;
+    }
+
+    
+
+    // functions - cd time
+    async function updateTime() {
+        cdTime.textContent = getCurrentTime();
     }
     updateTime();
     setInterval(updateTime, 1000);
 
 
-    // new terminal line
+
+    // functions - geo location
+    function getGeolocationDetails() {
+        return getGeolocation()
+            .then(position => {
+                const { latitude, longitude } = position.coords;
+                return getLocationDetails(latitude, longitude);
+            })
+            .catch(handleError);
+    }
+    function getGeolocation() {
+        return new Promise((resolve, reject) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            } else {
+                reject();
+            }
+        });
+    }
+    function getLocationDetails(latitude, longitude) {
+        return new Promise((resolve, reject) => {
+            if (!geoLocationApi) {
+                let country = 'Schweiz';
+                let city = 'Risch-Rotkreuz';
+                resolve({ latitude, longitude, country, city });
+            }
+
+            // OpenCage Data API
+            const apiKey = 'c0ffd54e3851460797b4653b24917346';
+            const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+    
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const location = data.results[0];
+                        const country = location.components.country;
+                        const city = location.components.city || location.components.town || location.components.village;
+    
+                        resolve({ latitude, longitude, country, city });
+                    } else {
+                        reject();
+                    }
+                })
+                .catch(() => reject());
+        });
+    }
+    function handleError() {
+        console.error('An error occurred');
+    }
+    // get geolocation and display in window
+    getGeolocationDetails().then(data => {
+        let coordinates = document.createElement('p');
+        let country = document.createElement('p');
+        let city = document.createElement('p');
+
+        coordinates.textContent = `Coordinates: ${data.latitude} | ${data.longitude}`;
+        country.textContent = `Country: ${data.country}`;
+        city.textContent = `City: ${data.city}`;
+
+        document.querySelector('#window-geolocation .content').appendChild(coordinates);
+        document.querySelector('#window-geolocation .content').appendChild(country);
+        document.querySelector('#window-geolocation .content').appendChild(city);
+
+        windows['window-geolocation'].openWindow();
+    }).catch(handleError);
+
+
+
+    // functions - public ip
+    async function fetchPublicIp() {
+        if (!publicIp) {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                publicIp = data.ip;
+                cdIp.innerHTML = publicIp;
+            } catch (error) {
+                publicIp = "147.88.201.117";
+            }
+        }
+    }
+    fetchPublicIp();
+
+
+
+    // functions - terminal new line
     let lineHeight = 0;
     function scrollOneLineDown() {
         if (lineHeight === 0) {
@@ -227,118 +366,273 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         document.getElementById('terminal').scrollTop += lineHeight;
     }
-    function getLineHeight() {
-        let firstPElement = document.querySelector('#terminal .terminal-line');
-        if (firstPElement && lineHeight === 0) {
-            lineHeight = firstPElement.offsetHeight;
-        }
+
+
+
+    // functions - terminal text element
+    function createTextElement(chapter) {
+        let textElement = document.createElement('p');
+        textElement.className = chapter;
+        document.querySelector('#terminal-content').appendChild(textElement);
+
+        return textElement;
     }
-    getLineHeight();
-    function typeText(element, text, delay) {
-        let index = 0;
-        let typing = setInterval(() => {
-            if (index < text.length) {
-                element.textContent += text.charAt(index);
-                index++;
+
+
+
+    // functions - terminal input
+    function createInputElement(chapter) {
+        return new Promise((resolve) => {
+            // create input element
+            let inputElement = document.createElement('p');
+            inputElement.className = 'input';
+    
+            let spanBlue = document.createElement('span');
+            spanBlue.className = 'color-blue';
+            spanBlue.innerHTML = '>&nbsp;';
+    
+            let spanInputText = document.createElement('span');
+            spanInputText.className = 'input-text';
+            spanInputText.setAttribute('contenteditable', 'true');
+    
+            inputElement.append(spanBlue, spanInputText);
+            scrollOneLineDown();
+    
+            // append to chapter div
+            let inputChapter = document.querySelector('#terminal-content div.' + chapter);
+            if (inputChapter) {
+                inputChapter.appendChild(inputElement);
             } else {
-                clearInterval(typing);
+                inputChapter = document.createElement('div');
+                inputChapter.className = chapter;
+                document.querySelector('#terminal-content').appendChild(inputChapter);
+                inputChapter.appendChild(inputElement);
             }
-        }, delay);
+    
+            // set focus
+            spanInputText.focus();
+    
+            // event listener
+            spanInputText.addEventListener('keydown', function handler(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    let inputText = spanInputText.textContent;
+                    if (inputText) {
+                        spanInputText.removeAttribute('contenteditable');
+                        spanInputText.removeEventListener('keydown', handler);
+                        resolve(inputText);
+                    }
+                }
+            });
+        });
     }
-    function addTerminalLine(content) {
-        let terminal = document.getElementById('terminal-content');
-        let newLine = document.createElement('div');
-        newLine.classList.add('terminal-line');
-        
-        let pElement1 = document.createElement('p');
-        let pElement2 = document.createElement('p');
-        
-        newLine.appendChild(pElement1);
-        newLine.appendChild(pElement2);
-        
-        terminal.appendChild(newLine);
-        
-        typeText(pElement1, content, 50); // Adjust the delay as needed
-        
-        // Add a delay before starting typing the second line
-        setTimeout(() => {
-            //typeText(pElement2, content, 50); // Adjust the delay as needed
-        }, 500); // Adjust the delay as needed
 
-        // scroll one line down
-        if (lineHeight === 0) {
-            getLineHeight();
+
+
+    // functions - terminal cursor
+    function hideCursor(chapter) {
+        if (chapter) {
+            let cursor = document.querySelector('#terminal-content p.' + chapter + ' .ti-cursor');
+            if (cursor) {
+                cursor.style.display = 'none';
+            }
         }
-        document.getElementById('terminal').scrollTop += lineHeight;
     }
-    function startAddingLines() {
-        let intervalId = setInterval(() => {
-            let terminal = document.getElementById('terminal');
-            let lines = terminal.querySelectorAll('.terminal-line');
-            
-            addTerminalLine('New line ' + (lines.length + 1));
-            
-            if (lines.length >= 49) {
-                clearInterval(intervalId);
-            }
-        }, 500);
-    }
-    //startAddingLines();
+    
+    
 
-    // TypeIt test / 46 characters per line
-    new TypeIt('#terminal-content p', {
-        cursorChar: "_",
-        waitUntilVisible: true,
-        speed: 80
-    })
-    .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
-    .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
-    .break().exec(() => scrollOneLineDown())
-    .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
-    .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
-    .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000)
-    .break().exec(() => scrollOneLineDown())
-    .type('Startup Time: <span class="color-yellow">0:00:07</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('IP: <span class="color-yellow">192.168.1.100</span>').break().exec(() => scrollOneLineDown()).pause(1000)
-    .break().exec(() => scrollOneLineDown())
-    .type('<span class="color-green">Checking </span>hardware integrity...').break().exec(() => scrollOneLineDown()).pause(3000)
-    .type('<span class="color-green">Loading </span>kernal modules...').break().exec(() => scrollOneLineDown()).pause(5000)
-    .type('<span class="color-green">Verifying </span>network connection...').break().exec(() => scrollOneLineDown()).pause(500)
-    .type('<span class="color-green">Starting </span>user interface...').break().exec(() => scrollOneLineDown()).pause(2000)
-    .break().exec(() => scrollOneLineDown())
-    .type('<span class="color-green">Loaded </span>mouseUp ........................... <span class="color-yellow">53%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Loaded </span>keyboardKeydown1 .................. <span class="color-yellow">58%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Loaded </span>keyboardKeydown2 .................. <span class="color-yellow">63%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Loaded </span>keyboardKeydown3 .................. <span class="color-yellow">68%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Loaded </span>keyboardKeydown4 .................. <span class="color-yellow">74%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Loaded </span>keyboardKeydown5 .................. <span class="color-yellow">79%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Loaded </span>keyboardKeydown ................... <span class="color-yellow">84%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-    .type('<span class="color-green">Loaded </span>startup ........................... <span class="color-yellow">89%</span>').break().exec(() => scrollOneLineDown()).pause(1000)
-    .break().exec(() => scrollOneLineDown())
-    .break().exec(() => scrollOneLineDown())
-    .type('<span class="color-blue">PLEASE ENTER YOUR INFORMATION:</span>').break().exec(() => scrollOneLineDown()).pause(100)
-    .break().exec(() => scrollOneLineDown())
-    .type('First Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Vincent Anton').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-    .type('Last Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Freeman').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-    .type('Date of Birth:<span class="color-blue">&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('2\\14\\1967').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-    .break().exec(() => scrollOneLineDown())
-    .break().exec(() => scrollOneLineDown())
-    .type('<span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span>').break().exec(() => scrollOneLineDown()).pause(100)
-    .break().exec(() => scrollOneLineDown())
-    .type('<span class="color-blue">>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('<span class="color-yellow">121</span>').break().exec(() => scrollOneLineDown()).pause(1000).options({ speed: 50 })
-    .go();
+    // terminal storyline
+    /*
+    details:
+    - Library: TypeIt (https://typeitjs.com/)
+    - Characters per line: 46
+
+    - Text chapter building:
+        - chapter var
+        - hide curser?
+        - new TypeIt instance
+
+    - chapers:
+        - chapter 1: booting up
+        - chapter 2: user information
+        - chapter 3: user input
+        - chapter 4: example
+    */
+    // chapter 1 - booting up
+    let chapter1;
+    function handleChapter1() {
+        chapter1 = new TypeIt(createTextElement('chapter1'), {
+            afterComplete: () => {
+                chapterProgress[1] = true;
+                main();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 80
+        })
+        .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
+        .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
+        .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
+        .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000)
+        .go();
+    }
+    // chapter 2 - user information
+    let chapter2;
+    function handleChapter2() {
+        fetchPublicIp().then(() => {
+            hideCursor('chapter1');
+
+            chapter2 = new TypeIt(createTextElement('chapter2'), {
+                afterComplete: () => {
+                    chapterProgress[2] = true;
+                    main();
+                },
+                cursorChar: "_",
+                waitUntilVisible: true,
+                speed: 80
+            })
+            .break().exec(() => scrollOneLineDown())
+            .type('Startup Time: <span class="color-yellow">' + getTimeDifference() + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('IP: <span class="color-yellow">' + publicIp + '</span>').break().exec(() => scrollOneLineDown()).pause(1000)
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-green">Checking </span>hardware integrity...').break().exec(() => scrollOneLineDown()).pause(3000)
+            .type('<span class="color-green">Loading </span>kernal modules...').break().exec(() => scrollOneLineDown()).pause(5000)
+            .type('<span class="color-green">Verifying </span>network connection...').break().exec(() => scrollOneLineDown()).pause(500)
+            .type('<span class="color-green">Starting </span>user interface...').break().exec(() => scrollOneLineDown()).pause(2000)
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-green">Loaded </span>mouseUp ........................... <span class="color-yellow">53%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown1 .................. <span class="color-yellow">58%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown2 .................. <span class="color-yellow">63%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown3 .................. <span class="color-yellow">68%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown4 .................. <span class="color-yellow">74%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown5 .................. <span class="color-yellow">79%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>keyboardKeydown ................... <span class="color-yellow">84%</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('<span class="color-green">Loaded </span>startup ........................... <span class="color-yellow">89%</span>').break().exec(() => scrollOneLineDown()).pause(1000)
+            .break().exec(() => scrollOneLineDown())
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-blue">PLEASE ENTER YOUR INFORMATION:</span>').break().exec(() => scrollOneLineDown()).pause(100)
+            .break().exec(() => scrollOneLineDown())
+            .type('First Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Vincent Anton').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
+            .type('Last Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Freeman').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
+            .type('Date of Birth:<span class="color-blue">&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('2\\14\\1967').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
+            .break().exec(() => scrollOneLineDown())
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span>').break().exec(() => scrollOneLineDown()).pause(100)
+            .break().exec(() => scrollOneLineDown())
+            .type('<span class="color-blue">>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('<span class="color-yellow">121</span>').break().exec(() => scrollOneLineDown()).pause(1000).options({ speed: 50 })
+            .break().exec(() => scrollOneLineDown() + hideCursor("chapter2"))
+            .go();
+        });
+    }
+    // chapter 4 - example
+    let chapter4;
+    function handleChapter4() {
+        hideCursor('chapter3');
+
+        chapter4 = new TypeIt(createTextElement('chapter4'), {
+            afterComplete: () => {
+                chapter4Done = true;
+                main();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 80
+        })
+        .break().exec(() => scrollOneLineDown())
+        .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
+    }
+
+
+
+    // functions - main
+    function main() {
+        if (!chapterProgress['user']) {
+
+            if (!chapterProgress[1]) { // chapter 1
+
+                handleChapter1();
+
+            } else if (!chapterProgress[2]) { // chapter 2
+
+                handleChapter2();
+
+            } else if (!chapterProgress[3]) { // chapter 3
+
+                createInputElement("chapter3").then(input => {
+                    let inputName = input;
+                    chapterProgress[3] = true;
+                    main();
+                });
+
+            } else { // reset
+
+                resetContent(chapters = [chapter1, chapter2]);
+
+            }
+        } else {
+            // show icons
+            // show systeminfo
+            // hide console
+        }
+    }
+    main();
+    function resetContent(chapters) {
+        // reset progress
+        for (let i = 0; i < chapterProgress.length; i++) {
+            chapterProgress[i] = false;
+        }
+
+        // reset typeIt instances
+        chapters.forEach(chapter => {
+            if (chapter) {
+                chapter.reset();
+            }
+        });
+
+        // reset terminal content
+        document.getElementById('terminal').innerHTML = terminalEmptyHtml;
+
+        setTimeout(() => {
+            main();
+        }, 1000);
+    }
+
+
 
     // functions - popup windows
-    const windows = [
-        document.querySelectorAll('.window').forEach(window => {
-            new PopupWindow(
-                window,
-                document.querySelector(`.windowIcon[data-window="${window.id}"]`)
-            );
-        })
-    ];
+    let windows = [];
+
+    document.querySelectorAll('.window').forEach((window, index) => {
+        // create window instances
+        const windowElement = window;
+        const iconElement = document.querySelector(`.windowIcon[data-window="${window.id}"]`);
+        const instance = new PopupWindow(windowElement, iconElement);
+        windows[window.id] = instance;
+
+        // create resize observer
+        const resizeObserver = new ResizeObserver(entries => {
+            entries.forEach(entry => {
+                window.querySelector('.footer p.windowSize').textContent = `${Math.floor(entry.contentRect.width)} x ${Math.floor(entry.contentRect.height)}`;
+            });
+        });
+        resizeObserver.observe(window);
+    });
+    /* example open and close windows
+    console.log(windows);
+    windows['window-image'].openWindow();
+    setTimeout(() => {
+        windows['window-image'].closeWindow();
+    }, 5000);
+    */
+
+      
+
+
+
     function movePopupWindows() {
         document.querySelectorAll('.window').forEach(window => {
             let left = window.offsetLeft;
@@ -375,4 +669,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     movePopupWindows();
+
+
+
+    // functions - dashboard system info
+    function initSystemInfo() {
+        // user
+        cdSystemInfo.querySelector('#systemInfoUser').textContent = "User: " + "Vincent Anton Freeman";
+        // startup time
+        cdSystemInfo.querySelector('#systemInfoStartup').textContent = "Startup: " + startTime.toLocaleTimeString('en-US', {hour12: false});
+        // storage
+        let storagePercentage = (Math.random() * (36.6481 - 27.9426) + 27.9426).toFixed(1);
+        let storageTb = (5 / 100 * storagePercentage).toFixed(1);
+        cdStorage.textContent = "Storage: " + storagePercentage + " % | " + storageTb + " TB";
+    }
+    initSystemInfo();
+
+
+
+    // functions - dashboard system info background
+    async function updateSystemInfo() {
+        // uptime
+        let uptime = getTimeDifference();
+        // cpu
+        let cpu = getCpuUsage();
+        // memory
+        let memory = getMemoryUsage();
+
+        cdUptime.textContent = `Uptime: ${uptime}`;
+        cdCpu.textContent = `CPU: ${cpu}%`;
+        cdMemory.textContent = `Memory: ${memory}%`;
+    }
+    updateSystemInfo();
+    setInterval(updateSystemInfo, 1000);
 });

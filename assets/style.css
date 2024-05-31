@@ -64,11 +64,29 @@ h1, h2, h3, h4, h5, h6, p, a, span, section, main, div, li, figcaption {
     color: var(--grey);
 }
 
+.blur {
+    filter: blur(5px);
+}
+
 body {
     height: 100svh;
     width: 100%;
     background-color: var(--black);
     cursor: url('images/cursor.svg'), auto;
+}
+
+#bgGrid {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: url('images/cursor.svg');
+    background-size: auto 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.02;
 }
 
 #bgNoise {
@@ -84,14 +102,17 @@ body {
 }
 
 /* styles - cornerdata*/
+.cornerdata, .cornerdata span {
+    white-space: nowrap;
+    color: var(--grey);
+    font-size: 0.8rem;
+}
+
 .cornerdata {
     --border-cornerdata: 20px;
     position: absolute;
     top: var(--border-cornerdata);
     left: var(--border-cornerdata);
-    white-space: nowrap;
-    color: var(--grey);
-    font-size: 0.8rem;
 }
 
 .cornerdata:nth-of-type(1) {
@@ -128,47 +149,10 @@ body {
     right: var(--border-cornerdata);
 }
 
-/* backup skew cornerdata 
-.cornerdata:nth-of-type(1) {
-    transform: perspective(500px) skew(-5deg, -5deg) rotateY(-5deg);
-    transform-origin: right top;
+.cornerdata #systemInfo {
+    display: block;
+    margin-top: 20px;
 }
-
-.cornerdata:nth-of-type(2) {
-    right: var(--border-cornerdata);
-    left: auto;
-    transform: perspective(500px) skew(5deg, 5deg) rotateY(5deg);
-    transform-origin: left top;
-}
-
-.cornerdata:nth-of-type(3) {
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.cornerdata:nth-of-type(4) {
-    right: var(--border-cornerdata);
-    left: auto;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.cornerdata:nth-of-type(5) {
-    top: auto;
-    bottom: var(--border-cornerdata);
-    transform: perspective(500px) skew(5deg, 5deg) rotateY(-5deg);
-    transform-origin: right bottom;
-}
-
-.cornerdata:nth-of-type(6) {
-    top: auto;
-    left: auto;
-    bottom: var(--border-cornerdata);
-    right: var(--border-cornerdata);
-    transform: perspective(500px) skew(-5deg, -5deg) rotateY(5deg);
-    transform-origin: left bottom;
-}
-*/
 
 /* styles - terminal */
 #terminal {
@@ -206,6 +190,19 @@ body {
     flex-wrap: nowrap;
 }
 
+#terminal .input {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+#terminal .input .input-text {
+    flex-grow: 1;
+    outline: none;
+    cursor: url('images/cursorText.svg') 0 17, auto;
+}
+
 /* styles - icon */
 .windowIcon {
     position: absolute;
@@ -217,7 +214,7 @@ body {
     justify-content: space-between;
     gap: 20px;
     align-items: center;
-    cursor: pointer;
+    cursor: url('images/cursorPointer.svg') 12 0, auto;
     user-select: none;
     transform: translateY(-50%);
 }
@@ -268,6 +265,7 @@ body {
     resize: both;
     pointer-events: none;
     min-height: calc(var(--header-height) * 2);
+    filter: drop-shadow(0 0 30px rgba(35, 35, 35, 0.6));
 }
 
 #window-image {
@@ -290,6 +288,13 @@ body {
     left: 40%;
 }
 
+#window-geolocation {
+    width: 400px;
+    height: 200px;
+    top: 50px;
+    left: 60%;
+}
+
 .window.show {
     opacity: 1;
     transform: scale(1);
@@ -307,8 +312,12 @@ body {
     width: 100%;
     background-color: var(--black);
     border-bottom: var(--border-size) solid var(--white);
-    cursor: grab;
+    
     white-space: nowrap;
+}
+
+.window .header {
+    cursor: grab;
 }
 
 .window .title {
@@ -326,12 +335,12 @@ body {
     right: 0;
     padding: var(--header-space-top) 10px;
     color: var(--yellow);
-    cursor: pointer;
+    cursor: url('images/cursorPointer.svg') 12 0, auto;
     user-select: none;
 }
 
 .window .content {
-    cursor: initial;
+    cursor: url('images/cursor.svg'), auto;
     padding: 10px;
     min-height: calc(100% - (var(--header-height) * 2));
 }
@@ -341,7 +350,6 @@ body {
     bottom: 0;
     border-top: var(--border-size) solid var(--white);
     border-bottom: none;
-    cursor: inherit;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -351,6 +359,8 @@ body {
 
 .window .footer p {
     color: var(--grey);
+    font-size: 0.8rem;
+    margin-top: 1px;
 }
 
 /* styles - window - scrollbar */
