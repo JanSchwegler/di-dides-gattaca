@@ -104,8 +104,10 @@ let mouseY;
 // variables - global
 let publicIp;
 let startTime = new Date();
+let started = false;
+let intro = false;
 let chapterProgress = [
-    { user: false }, // user login
+    false, // user login
     false, // chapter 1
     true, // chapter 2
     false, // chapter 3
@@ -120,6 +122,7 @@ let bgCanvasGrid;
 let bgCanvasGridCtx;
 let bgCanvas;
 let bgCanvasCtx;
+let cd = [];
 let cdMouse;
 let cdTime
 let cdIp;
@@ -128,6 +131,7 @@ let cdUptime;
 let cdCpu;
 let cdMemory;
 let cdStorage;
+let windowIcon;
 
 
 
@@ -137,6 +141,7 @@ let cdStorage;
 document.addEventListener('DOMContentLoaded', function () {
     // get elements
     terminalEmptyHtml = document.getElementById('terminal').innerHTML;
+    cd = document.querySelectorAll('.cornerdata');
     cdMouse = document.getElementById('cd-mouse');
     cdTime = document.getElementById('cd-time');
     cdIp = document.getElementById('cd-ip');
@@ -149,6 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
     cdCpu = cdSystemInfo.querySelector('#systemInfoCpu');
     cdMemory = cdSystemInfo.querySelector('#systemInfoMemory');
     cdStorage = cdSystemInfo.querySelector('#systemInfoStorage');
+    windowIcon = document.querySelectorAll('.windowIcon');
 
 
 
@@ -192,6 +198,18 @@ document.addEventListener('DOMContentLoaded', function () {
         cdMouse.innerHTML = "x: " + mouseX + " | y: " + mouseY;
     });
     
+
+
+
+    
+    // on mouse click for start
+    window.addEventListener("click", function() {
+        if (!started) {
+            started = true;
+            main();
+        }
+    });
+        
 
 
 
@@ -298,6 +316,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     updateTime();
     setInterval(updateTime, 1000);
+
+
+
+    // functions - intro
+    function handleIntro() {
+        // play video
+        // when video ends
+        // hide video
+        // intro = true;
+        // main(); -> start console
+        // display corner data
+        const video = document.getElementById('introContainer');
+        video.autoplay = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.play();
+
+        video.addEventListener('ended', function() {
+            video.removeEventListener('ended', this);
+            bgCanvasGrid.style.opacity = '0.1';
+            video.style.opacity = '0';
+            intro = true;
+            cd.forEach(cdElement => cdElement.style.display = 'block');
+            setTimeout(() => {
+                main();
+            }, 1000);
+        });
+    }
 
 
 
@@ -592,36 +638,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // functions - main
     function main() {
-        if (!chapterProgress['user']) {
+        // intro
+        if (!intro) {
+            handleIntro();
+            return;
+        }
 
-            if (!chapterProgress[1]) { // chapter 1
+        // terminal
+        if (!chapterProgress[0]) {
 
+            // chapter 1
+            if (!chapterProgress[1]) {
                 handleChapter1();
-
-            } else if (!chapterProgress[2]) { // chapter 2
-
+                return;
+            }
+            
+            // chapter 2
+            if (!chapterProgress[2]) {
                 handleChapter2();
+                return;
+            }
 
-            } else if (!chapterProgress[3]) { // chapter 3
-
+            // chapter 3
+            if (!chapterProgress[3]) {
                 createInputElement("chapter3").then(input => {
                     let inputName = input;
                     chapterProgress[3] = true;
                     main();
                 });
-
-            } else { // reset
-
-                resetContent(chapters = [chapter1, chapter2]);
-
+                return;
             }
-        } else {
-            // show icons
-            // show systeminfo
-            // hide console
+
+            // reset
+            resetContent(chapters = [chapter1, chapter2]);
+            return;
         }
+
+        // dashboard
+
+        // show icons
+        // show systeminfo
+        // hide console
+        cdSystemInfo.style.display = 'block';
+        windowIcon.forEach(icon => icon.style.display = 'flex');
     }
-    main();
     function resetContent(chapters) {
         // reset progress
         for (let i = 0; i < chapterProgress.length; i++) {
