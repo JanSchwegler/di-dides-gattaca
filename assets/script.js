@@ -275,6 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return getGeolocation()
             .then(position => {
                 const { latitude, longitude } = position.coords;
+                console.log('Latitude:', latitude);
                 return getLocationDetails(latitude, longitude);
             })
             .catch(handleError);
