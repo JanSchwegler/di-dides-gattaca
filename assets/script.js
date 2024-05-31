@@ -275,7 +275,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return getGeolocation()
             .then(position => {
                 const { latitude, longitude } = position.coords;
-                return getLocationDetails(latitude, longitude);
+                let accuracy = position.coords.accuracy;
+                let heading = position.coords.heading;
+                let speed = position.coords.speed;
+                return getLocationDetails(latitude, longitude, accuracy, heading, speed);
             })
             .catch(handleError);
     }
@@ -288,12 +291,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    function getLocationDetails(latitude, longitude) {
+    function getLocationDetails(latitude, longitude, accuracy, heading, speed) {
         return new Promise((resolve, reject) => {
             if (!geoLocationApi) {
                 let country = 'Schweiz';
                 let city = 'Risch-Rotkreuz';
-                resolve({ latitude, longitude, country, city });
+                resolve({ latitude, longitude, accuracy, heading, speed, country, city });
             }
 
             // OpenCage Data API
@@ -308,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const country = location.components.country;
                         const city = location.components.city || location.components.town || location.components.village;
     
-                        resolve({ latitude, longitude, country, city });
+                        resolve({ latitude, longitude, accuracy, heading, speed, country, city });
                     } else {
                         reject();
                     }
@@ -321,17 +324,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // get geolocation and display in window
     getGeolocationDetails().then(data => {
-        let coordinates = document.createElement('p');
-        let country = document.createElement('p');
-        let city = document.createElement('p');
-
-        coordinates.textContent = `Coordinates: ${data.latitude} | ${data.longitude}`;
-        country.textContent = `Country: ${data.country}`;
-        city.textContent = `City: ${data.city}`;
-
-        document.querySelector('#window-geolocation .content').appendChild(coordinates);
-        document.querySelector('#window-geolocation .content').appendChild(country);
-        document.querySelector('#window-geolocation .content').appendChild(city);
+        const createParagraph = text => {
+            const p = document.createElement('p');
+            p.innerHTML = text;
+            return p;
+        };
+        
+        const content = document.querySelector('#window-geolocation .content');
+        const dataText = [
+            'Geolocation Permission Granted<br>Reading data...<br>Analysing data...<br><br>',
+            `Coordinates: ${data.latitude} | ${data.longitude}`,
+            `Country: ${data.country}`,
+            `City: ${data.city}`,
+            `Accuracy: ${data.accuracy}`,
+            `Moving: ${data.moving ? 'Yes' : 'No'}`,
+            `Speed: ${data.speed || 0} m/s`,
+            `Direction: ${data.heading || '-'}`            
+        ];
+        
+        dataText.forEach(text => content.appendChild(createParagraph(text)));
 
         windows['window-geolocation'].openWindow();
     }).catch(handleError);
