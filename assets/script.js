@@ -116,6 +116,8 @@ let geoLocationApi = false;
 
 // variables - elements
 let terminalEmptyHtml;
+let bgCanvasGrid;
+let bgCanvasGridCtx;
 let bgCanvas;
 let bgCanvasCtx;
 let cdMouse;
@@ -138,6 +140,8 @@ document.addEventListener('DOMContentLoaded', function () {
     cdMouse = document.getElementById('cd-mouse');
     cdTime = document.getElementById('cd-time');
     cdIp = document.getElementById('cd-ip');
+    bgCanvasGrid = document.getElementById('bgGrid');
+    bgCanvasGridCtx = bgCanvasGrid.getContext('2d');
     bgCanvas = document.getElementById('bgNoise');
     bgCanvasCtx = bgCanvas.getContext('2d');
     cdSystemInfo = document.querySelector('#systemInfo');
@@ -157,7 +161,8 @@ document.addEventListener('DOMContentLoaded', function () {
         screenHeight = document.documentElement.clientHeight || window.innerHeight;
 
         // function calls
-        resizeCanvas();
+        resizeCanvas(bgCanvas);
+        resizeCanvas(bgCanvasGrid);
         movePopupWindows();
     });
 
@@ -192,12 +197,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
     // functions
-    // functions - bg noise
-    function resizeCanvas() {
-        bgCanvas.width = window.innerWidth;
-        bgCanvas.height = window.innerHeight;
+    // functions - bg grid
+    function resizeCanvas(canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        bgCanvasDrawGrid();
     }
-    resizeCanvas();
+    function bgCanvasDrawGrid() {
+        bgCanvasGrid.width = screenWidth;
+        bgCanvasGrid.height = screenHeight;
+
+        const gridSize = 30;
+        const gridSizeX = bgCanvasGrid.width / Math.ceil(bgCanvasGrid.width / gridSize);
+        const gridSizeY = bgCanvasGrid.height / Math.ceil(bgCanvasGrid.height / gridSize);
+
+        for (let x = 0; x < screenWidth; x += gridSizeX) {
+            bgCanvasGridCtx.moveTo(x, 0);
+            bgCanvasGridCtx.lineTo(x, screenHeight);
+        }
+        for (let y = 0; y < screenHeight; y += gridSizeY) {
+            bgCanvasGridCtx.moveTo(0, y);
+            bgCanvasGridCtx.lineTo(screenWidth, y);
+        }
+        bgCanvasGridCtx.strokeStyle = "#f6f6f6";
+        bgCanvasGridCtx.lineWidth = 0.5;
+        bgCanvasGridCtx.stroke();
+    }
+    bgCanvasDrawGrid();
+
+
+
+    // functions - bg noise
+    resizeCanvas(bgCanvas);
     function generateNoise() {
         let width = bgCanvas.width;
         let height = bgCanvas.height;

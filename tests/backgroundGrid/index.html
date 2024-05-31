@@ -10,7 +10,7 @@
 </body>
 <script>
 
-const canvas = document.getElementById('gridCanvas');
+        const canvas = document.getElementById('gridCanvas');
         const context = canvas.getContext('2d');
 
         function resizeCanvas() {
@@ -20,20 +20,22 @@ const canvas = document.getElementById('gridCanvas');
         }
 
         function drawGrid() {
-            const gridSize = 20; // Size of the grid squares
+            const gridSize = 30;
+            const gridSizeX = canvas.width / Math.ceil(canvas.width / gridSize);
+            const gridSizeY = canvas.height / Math.ceil(canvas.height / gridSize);
+
             context.clearRect(0, 0, canvas.width, canvas.height);
-            
-            context.strokeStyle = 'rgba(0, 0, 0, 1)';
+            context.strokeStyle = 'rgb(0, 0, 0)';
             context.lineWidth = 1;
 
-            for (let x = 0; x <= canvas.width; x += gridSize) {
+            for (let x = 0; x <= canvas.width; x += gridSizeX) {
                 context.beginPath();
                 context.moveTo(x, 0);
                 context.lineTo(x, canvas.height);
                 context.stroke();
             }
 
-            for (let y = 0; y <= canvas.height; y += gridSize) {
+            for (let y = 0; y <= canvas.height; y += gridSizeY) {
                 context.beginPath();
                 context.moveTo(0, y);
                 context.lineTo(canvas.width, y);
