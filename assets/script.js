@@ -616,7 +616,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // create resize observer
         const resizeObserver = new ResizeObserver(entries => {
             entries.forEach(entry => {
-                window.querySelector('.footer p.windowSize').textContent = `${entry.contentRect.width} x ${entry.contentRect.height}`;
+                window.querySelector('.footer p.windowSize').textContent = `${Math.floor(entry.contentRect.width)} x ${Math.floor(entry.contentRect.height)}`;
             });
         });
         resizeObserver.observe(window);
