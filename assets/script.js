@@ -884,6 +884,22 @@ document.addEventListener('DOMContentLoaded', function () {
         .break().exec(() => scrollOneLineDown())
         .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
     }*/
+    // functions - transition to system
+    function handleTransitionToDashboard() {
+        windows['window-transitionToSystem'].openWindow();
+        document.getElementById('terminal').style.display = 'none';
+        setTimeout(() => {
+            windows['window-transitionToSystem'].closeWindow();
+            chapterProgress[0] = true;
+            main();
+        }, 5000);
+    }
+    // functions - dashboard startup
+    function handleDashboardStartup() {
+        cdSystemInfo.style.display = 'block';
+        windowIcon.forEach(icon => icon.style.display = 'flex');
+        windows['window-dashboard'].openWindow();
+    }
 
 
 
@@ -958,18 +974,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // reset
-            //resetContent(chapters = [chapter1, chapter2]);
+            // transition to dashboard
+            handleTransitionToDashboard();
             return;
+
+            // reset
+            //resetContent(chapters = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10]);
+            
         }
 
         // dashboard
-
-        // show icons
-        // show systeminfo
-        // hide console
-        cdSystemInfo.style.display = 'block';
-        windowIcon.forEach(icon => icon.style.display = 'flex');
+        handleDashboardStartup();
     }
     function resetContent(chapters) {
         // reset progress
