@@ -248,7 +248,7 @@ body {
 }
 
 .windowIcon svg {
-    width: 60px;
+    width: 50px;
     height: auto;
 }
 
@@ -258,11 +258,11 @@ body {
 }
 
 /* styles - icon - position */
-.windowIcon[data-window="window-image"] {
+.windowIcon[data-window="window-chat"] {
     top: calc(50svh - 200px);
 }
 
-.windowIcon[data-window="window-terminal"] {
+.windowIcon[data-window="window-search"] {
     top: calc(50svh - 100px);
 }
 
@@ -270,7 +270,7 @@ body {
     top: calc(50svh + 100px);
 }
 
-.windowIcon[data-window="window-system"] {
+.windowIcon[data-window="window-fileSystem"] {
     top: calc(50svh + 200px);
 }
 
@@ -299,12 +299,12 @@ body {
 /* //////////////////////////////////////////////////////////////////////////////////////// */
 /* window custom size & position */
 /* //////////////////////////////////////////////////////////////////////////////////////// */
-#window-image {
+#window-chat {
     top: 10%;
     left: 10%;
 }
 
-#window-terminal {
+#window-search {
     top: 20%;
     left: 20%;
 }
@@ -314,7 +314,7 @@ body {
     left: 30%;
 }
 
-#window-system {
+#window-fileSystem {
     top: 40%;
     left: 40%;
 }
