@@ -296,6 +296,9 @@ body {
     filter: drop-shadow(0 0 30px rgba(35, 35, 35, 0.6));
 }
 
+/* //////////////////////////////////////////////////////////////////////////////////////// */
+/* window custom size & position */
+/* //////////////////////////////////////////////////////////////////////////////////////// */
 #window-image {
     top: 10%;
     left: 10%;
@@ -322,6 +325,37 @@ body {
     top: 50px;
     left: calc(100% - 480px);
 }
+
+#window-analysingFiles {
+    width: 50vw;
+    height: 500px;
+    top: 100px;
+    left: 400px;
+}
+
+#window-analysingBrowserHistory {
+    width: 50vw;
+    height: 500px;
+    top: 150px;
+    left: 450px;
+}
+
+#window-analysingMessages {
+    width: 50vw;
+    height: 500px;
+    top: 200px;
+    left: 500px;
+}
+
+#window-userData {
+    width: 500px;
+    height: 700px;
+    top: 30px;
+    left: 800px;
+}
+
+/* //////////////////////////////////////////////////////////////////////////////////////// */
+/* //////////////////////////////////////////////////////////////////////////////////////// */
 
 .window.show {
     opacity: 1;
