@@ -17,7 +17,7 @@ class PopupWindow {
     }
 
     init() {
-        this.windowElement.querySelector('.close').addEventListener('click', () => this.closeWindow());
+        this.windowElement.querySelector('.close')?.addEventListener('click', () => this.closeWindow());
         this.windowElement.querySelector('.header').addEventListener('mousedown', (e) => this.startDrag(e));
         this.windowElement.addEventListener('mousedown', () => this.focusWindow());
         if (this.iconElement) {
@@ -104,11 +104,20 @@ let mouseY;
 // variables - global
 let publicIp;
 let startTime = new Date();
+let started = false;
+let intro = false;
 let chapterProgress = [
-    { user: false }, // user login
-    false, // chapter 1
-    true, // chapter 2
-    false, // chapter 3
+    false, // user login
+    false, // chapter 1 - booting up
+    false, // chapter 2 - connection
+    false, // chapter 3 - analysing geo location
+    false, // chapter 4 - analysing files
+    false, // chapter 5 - analysing browser history
+    false, // chapter 6 - analysing messages
+    false, // chapter 7 - get first name
+    false, // chapter 8 - get last name
+    false,  // chapter 9 - get date of birth
+    false, // chapter 10 - user data
 ];
 let cpuUsage = 50;
 let memoryUsage = 25;
@@ -116,8 +125,11 @@ let geoLocationApi = false;
 
 // variables - elements
 let terminalEmptyHtml;
+let bgCanvasGrid;
+let bgCanvasGridCtx;
 let bgCanvas;
 let bgCanvasCtx;
+let cd = [];
 let cdMouse;
 let cdTime
 let cdIp;
@@ -126,6 +138,12 @@ let cdUptime;
 let cdCpu;
 let cdMemory;
 let cdStorage;
+let windowIcon;
+
+// user inputs
+let inputFirstName;
+let inputLastName;
+let inputDateOfBirth;
 
 
 
@@ -135,9 +153,12 @@ let cdStorage;
 document.addEventListener('DOMContentLoaded', function () {
     // get elements
     terminalEmptyHtml = document.getElementById('terminal').innerHTML;
+    cd = document.querySelectorAll('.cornerdata');
     cdMouse = document.getElementById('cd-mouse');
     cdTime = document.getElementById('cd-time');
     cdIp = document.getElementById('cd-ip');
+    bgCanvasGrid = document.getElementById('bgGrid');
+    bgCanvasGridCtx = bgCanvasGrid.getContext('2d');
     bgCanvas = document.getElementById('bgNoise');
     bgCanvasCtx = bgCanvas.getContext('2d');
     cdSystemInfo = document.querySelector('#systemInfo');
@@ -145,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
     cdCpu = cdSystemInfo.querySelector('#systemInfoCpu');
     cdMemory = cdSystemInfo.querySelector('#systemInfoMemory');
     cdStorage = cdSystemInfo.querySelector('#systemInfoStorage');
+    windowIcon = document.querySelectorAll('.windowIcon');
 
 
 
@@ -157,7 +179,8 @@ document.addEventListener('DOMContentLoaded', function () {
         screenHeight = document.documentElement.clientHeight || window.innerHeight;
 
         // function calls
-        resizeCanvas();
+        resizeCanvas(bgCanvas);
+        resizeCanvas(bgCanvasGrid);
         movePopupWindows();
     });
 
@@ -191,13 +214,52 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     
+    // on mouse click for start
+    window.addEventListener("click", function() {
+        if (!started) {
+            started = true;
+            main();
+            this.window.removeEventListener('click', this);
+        }
+    });
+        
+
+
+
+    
     // functions
-    // functions - bg noise
-    function resizeCanvas() {
-        bgCanvas.width = window.innerWidth;
-        bgCanvas.height = window.innerHeight;
+    // functions - bg grid
+    function resizeCanvas(canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        bgCanvasDrawGrid();
     }
-    resizeCanvas();
+    function bgCanvasDrawGrid() {
+        bgCanvasGrid.width = screenWidth;
+        bgCanvasGrid.height = screenHeight;
+
+        const gridSize = 30;
+        const gridSizeX = bgCanvasGrid.width / Math.ceil(bgCanvasGrid.width / gridSize);
+        const gridSizeY = bgCanvasGrid.height / Math.ceil(bgCanvasGrid.height / gridSize);
+
+        for (let x = 0; x < screenWidth; x += gridSizeX) {
+            bgCanvasGridCtx.moveTo(x, 0);
+            bgCanvasGridCtx.lineTo(x, screenHeight);
+        }
+        for (let y = 0; y < screenHeight; y += gridSizeY) {
+            bgCanvasGridCtx.moveTo(0, y);
+            bgCanvasGridCtx.lineTo(screenWidth, y);
+        }
+        bgCanvasGridCtx.strokeStyle = "#f6f6f6";
+        bgCanvasGridCtx.lineWidth = 0.5;
+        bgCanvasGridCtx.stroke();
+    }
+    bgCanvasDrawGrid();
+
+
+
+    // functions - bg noise
+    resizeCanvas(bgCanvas);
     function generateNoise() {
         let width = bgCanvas.width;
         let height = bgCanvas.height;
@@ -270,6 +332,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    // functions - intro
+    function handleIntro() {
+        const video = document.getElementById('introContainer');
+        video.autoplay = true;
+        video.muted = true;
+        video.playsInline = true;
+        //video.currentTime = 119;
+        video.play();
+
+        video.addEventListener('ended', function() {
+            video.removeEventListener('ended', this);
+            bgCanvasGrid.style.opacity = '0.1';
+            video.style.opacity = '0';
+            intro = true;
+            cd.forEach(cdElement => cdElement.style.display = 'block');
+            setTimeout(() => {
+                main();
+            }, 1000);
+        });
+    }
+
+
+
     // functions - geo location
     function getGeolocationDetails() {
         return getGeolocation()
@@ -323,6 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('An error occurred');
     }
     // get geolocation and display in window
+    /*
     getGeolocationDetails().then(data => {
         const createParagraph = text => {
             const p = document.createElement('p');
@@ -345,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dataText.forEach(text => content.appendChild(createParagraph(text)));
 
         windows['window-geolocation'].openWindow();
-    }).catch(handleError);
+    }).catch(handleError);*/
 
 
 
@@ -479,19 +565,261 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             cursorChar: "_",
             waitUntilVisible: true,
-            speed: 80
+            speed: 20
         })
-        .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(500)
+        .type('GTCA OS').break().exec(() => scrollOneLineDown()).pause(200)
         .type('Bioinformatics GeneAccess BIOS <span class="color-yellow">v24.5.17</span>').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(2000)
+        .type('<span class="color-green">Initializing system...</span>').break().exec(() => scrollOneLineDown()).pause(1000)
         .break().exec(() => scrollOneLineDown())
-        .break().exec(() => scrollOneLineDown()).options({ speed: 40 })
-        .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(500)
-        .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(2000)
+        .break().exec(() => scrollOneLineDown())
+        .type('Startup Time: <span class="color-yellow">' + getTimeDifference() + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Language: en-GB').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Memory: <span class="color-yellow">256</span>GB DDR<span class="color-yellow">4</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Storage: <span class="color-yellow">5</span>TB NVMe SSD').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Viewport Size: <span class="color-yellow">' + window.innerWidth + '</span> x <span class="color-yellow">' + window.innerHeight + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Pixel Ratio: <span class="color-yellow">' + window.devicePixelRatio + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Color Depth: <span class="color-yellow">' + window.screen.colorDepth + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Cookies Available: ' + navigator.cookieEnabled).break().exec(() => scrollOneLineDown()).pause(200)
+        .type('Local Storage Available: ' + (typeof(Storage) !== "undefined")).break().exec(() => scrollOneLineDown()).pause(500)
+        .go();
+        /*
+
+        Later:
+        - connection type: 
+        - downlink speed:
+        */
+    }
+    // chapter 2 - connection
+    let chapter2;
+    function handleChapter2() {
+        fetchPublicIp().then(() => {
+            hideCursor('chapter1');
+
+            chapter2 = new TypeIt(createTextElement('chapter2'), {
+                afterComplete: () => {
+                    chapterProgress[2] = true;
+                    main();
+                },
+                cursorChar: "_",
+                waitUntilVisible: true,
+                speed: 20
+            })
+            .break().exec(() => scrollOneLineDown())
+            .break().exec(() => scrollOneLineDown())
+            .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('Connection Type: <span class="color-yellow">' + navigator.connection.effectiveType + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('Downlink Speed: <span class="color-yellow">' + navigator.connection.downlink + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
+            .type('IP: <span class="color-yellow">' + publicIp + '</span>').break().exec(() => scrollOneLineDown()).pause(500)
+            .go();
+        });
+    }
+    // chapter 3 - analysing geo location
+    let chapter3;
+    function handleChapter3_1() {
+        hideCursor('chapter2');
+        chapter3 = new TypeIt(createTextElement('chapter3'), {
+            afterComplete: () => {
+                handleChapter3_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-green">Analysing</span> location...').break().exec(() => scrollOneLineDown()).pause(200)
         .go();
     }
-    // chapter 2 - user information
-    let chapter2;
+    function handleChapter3_2() {
+        getGeolocationDetails().then(data => {
+            const createParagraph = text => {
+                const p = document.createElement('p');
+                p.innerHTML = text;
+                return p;
+            };
+            
+            const content = document.querySelector('#window-geolocation .content');
+            const dataText = [
+                'Geolocation Permission Granted<br>Reading data...<br>Analysing data...<br><br>',
+                `Coordinates: ${data.latitude} | ${data.longitude}`,
+                `Country: ${data.country}`,
+                `City: ${data.city}`,
+                `Accuracy: ${data.accuracy}`,
+                `Moving: ${data.moving ? 'Yes' : 'No'}`,
+                `Speed: ${data.speed || 0} m/s`,
+                `Direction: ${data.heading || '-'}`            
+            ];
+            
+            dataText.forEach(text => content.appendChild(createParagraph(text)));
+
+            windows['window-geolocation'].openWindow();
+            chapterProgress[3] = true;
+            main();
+        }).catch(handleError);
+    }
+    // chapter 4 - analysing files
+    let chapter4;
+    function handleChapter4_1() {
+        hideCursor('chapter3');
+        chapter4 = new TypeIt(createTextElement('chapter4'), {
+            afterComplete: () => {
+                handleChapter4_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .type('<span class="color-green">Analysing</span> local files...').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    function handleChapter4_2() {
+        windows['window-analysingFiles'].openWindow();
+        setTimeout(() => {
+            windows['window-analysingFiles'].closeWindow();
+        }, 10000);
+
+        chapterProgress[4] = true;
+        main();
+    }
+    // chapter 5 - analysing browser history
+    let chapter5;
+    function handleChapter5_1() {
+        hideCursor('chapter4');
+        chapter5 = new TypeIt(createTextElement('chapter5'), {
+            afterComplete: () => {
+                handleChapter5_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .type('<span class="color-green">Analysing</span> web browsing history...').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    function handleChapter5_2() {
+        windows['window-analysingBrowserHistory'].openWindow();
+        setTimeout(() => {
+            windows['window-analysingBrowserHistory'].closeWindow();
+        }, 6000);
+
+        chapterProgress[5] = true;
+        main();
+    }
+    // chapter 6 - analysing messages
+    let chapter6;
+    function handleChapter6_1() {
+        hideCursor('chapter5');
+        chapter6 = new TypeIt(createTextElement('chapter6'), {
+            afterComplete: () => {
+                handleChapter6_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .type('<span class="color-green">Analysing</span> messages...').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    function handleChapter6_2() {
+        windows['window-analysingMessages'].openWindow();
+        setTimeout(() => {
+            windows['window-analysingMessages'].closeWindow();
+        }, 8000);
+
+        chapterProgress[6] = true;
+        main();
+    }
+    // chapter 7 - get first name
+    let chapter7;
+    function handleChapter7() {
+        hideCursor('chapter6');
+        chapter7 = new TypeIt(createTextElement('chapter7'), {
+            afterComplete: () => {
+                hideCursor('chapter7');
+                createInputElement("chapter7_2").then(input => {
+                    inputName = input;
+                    chapterProgress[7] = true;
+                    main();
+                });
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        }).pause(4000)
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">PLEASE ENTER YOUR INFORMATION:</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .break().exec(() => scrollOneLineDown())
+        .type('First Name:').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    // chapter 8 - get last name
+    let chapter8;
+    function handleChapter8() {
+        chapter8 = new TypeIt(createTextElement('chapter8'), {
+            afterComplete: () => {
+                hideCursor('chapter8');
+                createInputElement("chapter8_2").then(input => {
+                    inputLastName = input;
+                    chapterProgress[8] = true;
+                    main();
+                });
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .type('Last Name:').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    // chapter 9 - get date of birth
+    let chapter9;
+    function handleChapter9() {
+        chapter9 = new TypeIt(createTextElement('chapter9'), {
+            afterComplete: () => {
+                hideCursor('chapter9');
+                createInputElement("chapter9_2").then(input => {
+                    inputDateOfBirth = input;
+                    chapterProgress[9] = true;
+                    main();
+                });
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .type('Date of Birth:').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    // chapter 10 - user data
+    let chapter10;
+    function handleChapter10_1() {
+        chapter10 = new TypeIt(createTextElement('chapter10'), {
+            afterComplete: () => {
+                handleChapter10_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-green">Searching</span> data on user...').break().exec(() => scrollOneLineDown()).pause(2000)
+        .type('<span class="color-green">Analysing</span> data...').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Generating</span> report...').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    function handleChapter10_2() {
+        windows['window-userData'].openWindow();
+        chapterProgress[10] = true;
+        main();
+    }
+
+    // chapter 3 - user information
+    /*
+    let chapter3;
     function handleChapter2() {
         fetchPublicIp().then(() => {
             hideCursor('chapter1');
@@ -506,7 +834,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 speed: 80
             })
             .break().exec(() => scrollOneLineDown())
-            .type('Startup Time: <span class="color-yellow">' + getTimeDifference() + '</span>').break().exec(() => scrollOneLineDown()).pause(200)
             .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
             .type('IP: <span class="color-yellow">' + publicIp + '</span>').break().exec(() => scrollOneLineDown()).pause(1000)
             .break().exec(() => scrollOneLineDown())
@@ -538,8 +865,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .break().exec(() => scrollOneLineDown() + hideCursor("chapter2"))
             .go();
         });
-    }
+    }*/
     // chapter 4 - example
+    /*
     let chapter4;
     function handleChapter4() {
         hideCursor('chapter3');
@@ -551,46 +879,113 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             cursorChar: "_",
             waitUntilVisible: true,
-            speed: 80
+            speed: 20
         })
         .break().exec(() => scrollOneLineDown())
         .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
+    }*/
+    // functions - transition to system
+    function handleTransitionToDashboard() {
+        windows['window-transitionToSystem'].openWindow();
+        document.getElementById('terminal').style.display = 'none';
+        setTimeout(() => {
+            windows['window-transitionToSystem'].closeWindow();
+            chapterProgress[0] = true;
+            main();
+        }, 5000);
+    }
+    // functions - dashboard startup
+    function handleDashboardStartup() {
+        cdSystemInfo.style.display = 'block';
+        windowIcon.forEach(icon => icon.style.display = 'flex');
+        windows['window-dashboard'].openWindow();
     }
 
 
 
     // functions - main
     function main() {
-        if (!chapterProgress['user']) {
-
-            if (!chapterProgress[1]) { // chapter 1
-
-                handleChapter1();
-
-            } else if (!chapterProgress[2]) { // chapter 2
-
-                handleChapter2();
-
-            } else if (!chapterProgress[3]) { // chapter 3
-
-                createInputElement("chapter3").then(input => {
-                    let inputName = input;
-                    chapterProgress[3] = true;
-                    main();
-                });
-
-            } else { // reset
-
-                resetContent(chapters = [chapter1, chapter2]);
-
-            }
-        } else {
-            // show icons
-            // show systeminfo
-            // hide console
+        // intro
+        if (!intro) {
+            handleIntro();
+            return;
         }
+
+        // terminal
+        if (!chapterProgress[0]) {
+
+            // chapter 1
+            if (!chapterProgress[1]) {
+                handleChapter1();
+                return;
+            }
+            
+            // chapter 2
+            if (!chapterProgress[2]) {
+                handleChapter2();
+                return;
+            }
+
+            // chapter 3
+            if (!chapterProgress[3]) {
+                handleChapter3_1();
+                return;
+            }
+
+            // chapter 4
+            if (!chapterProgress[4]) {
+                handleChapter4_1();
+                return;
+            }
+
+            // chapter 5
+            if (!chapterProgress[5]) {
+                handleChapter5_1();
+                return;
+            }
+
+            // chapter 6
+            if (!chapterProgress[6]) {
+                handleChapter6_1();
+                return;
+            }
+
+            // chapter 7
+            if (!chapterProgress[7]) {
+                handleChapter7();
+                return;
+            }
+
+            // chapter 8
+            if (!chapterProgress[8]) {
+                handleChapter8();
+                return;
+            }
+
+            // chapter 9
+            if (!chapterProgress[9]) {
+                handleChapter9();
+                return;
+            }
+
+            // chapter 10
+            if (!chapterProgress[10]) {
+                handleChapter10_1();
+                return;
+            }
+
+            // transition to dashboard
+            handleTransitionToDashboard();
+            return;
+
+            // reset
+            //resetContent(chapters = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10]);
+            
+        }
+
+        // dashboard
+        handleDashboardStartup();
     }
-    main();
     function resetContent(chapters) {
         // reset progress
         for (let i = 0; i < chapterProgress.length; i++) {
