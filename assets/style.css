@@ -309,9 +309,45 @@ body {
     left: 20%;
 }
 
-#window3-dashboard {
-    top: 30%;
-    left: 30%;
+#window-dashboard {
+    top: 200px;
+    left: 300px;
+    width: 1000px;
+    height: 600px;
+}
+
+#window-dashboard .content {
+    display: grid;
+    grid-template-columns: 300px auto;
+    grid-template-rows: auto 1fr auto;
+    gap: 10px;
+}
+
+#window-dashboard .content>div:not(#dashboard-status) {
+    border: 1px solid var(--white);
+    justify-self: stretch;
+    padding: 10px;
+}
+
+#window-dashboard .content #dashboard-status {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+#window-dashboard .content #dashboard-status h2, #window-dashboard .content #dashboard-status span {
+    font-size: 1.88rem;
+    white-space: nowrap;
+}
+
+#window-dashboard .content #dashboard-dna {
+    grid-area: 2 / 1 / 4 / 2;
+}
+
+#window-dashboard .content #dashboard-userdetails {
+    grid-area: 1 / 2 / 3 / 3;
+}
+
+#window-dashboard .content #dashboard-system {
+    grid-area: 3 / 2 / 4 / 3;
 }
 
 #window-fileSystem {
