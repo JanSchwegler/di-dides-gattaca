@@ -108,8 +108,8 @@ let started = false;
 let intro = false;
 let chapterProgress = [
     false, // user login
-    true, // chapter 1 - booting up
-    true, // chapter 2 - connection
+    false, // chapter 1 - booting up
+    false, // chapter 2 - connection
     false, // chapter 3 - analysing geo location
     false, // chapter 4 - analysing files
     false, // chapter 5 - analysing browser history
