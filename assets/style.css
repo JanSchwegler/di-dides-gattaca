@@ -109,7 +109,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0.03;
+    opacity: 0.06;
     filter: blur(0.6px);
     z-index: 999;
     pointer-events: none;
@@ -140,7 +140,8 @@ body {
     position: absolute;
     top: var(--border-cornerdata);
     left: var(--border-cornerdata);
-    display: none;
+    opacity: 0;
+    transition: 1s ease-in-out;
 }
 
 .cornerdata:nth-of-type(1) {
@@ -296,6 +297,15 @@ body {
     filter: drop-shadow(0 0 30px rgba(35, 35, 35, 0.6));
 }
 
+.window .content h2 span {
+    font-size: 2rem;
+}
+
+.window .button {
+    cursor: url('images/cursorPointer.svg') 12 0, auto;
+    user-select: none;
+}
+
 /* //////////////////////////////////////////////////////////////////////////////////////// */
 /* window custom size & position */
 /* //////////////////////////////////////////////////////////////////////////////////////// */
@@ -390,6 +400,25 @@ body {
     left: calc(100% - 480px);
 }
 
+#window-geolocation-video {
+    width: 1002px;
+    height: 674px;
+    top: 100px;
+    left: 200px;
+}
+
+#window-geolocation-video .content{
+    padding: 0;
+    overflow: hidden;
+    width: 1000px;
+    height: 600px;
+}
+
+#window-geolocation-video video {
+    width: 1000px;
+    height: auto;
+}
+
 #window-analysingFiles {
     width: 50vw;
     height: 500px;
@@ -409,6 +438,13 @@ body {
     height: 500px;
     top: 200px;
     left: 500px;
+}
+
+#window-userVerify {
+    width: 500px;
+    height: 700px;
+    top: 30px;
+    left: 800px;
 }
 
 #window-userData {

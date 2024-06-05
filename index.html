@@ -279,9 +279,25 @@
             <p class="windowSize"></p>
         </div>
     </div>
-    <div id="window-analysingFiles" class="window">
+    <div id="window-geolocation-video" class="window">
         <div class="header">
             <p class="title">Analysing Location</p>
+            <a class="close">[ close ]</a>
+        </div>
+        <div class="content">
+            <video id="videoAnalyzingLocation" muted playsinline>
+                <source src="assets/videos/analyzing location.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
+    </div>
+    <div id="window-analysingFiles" class="window">
+        <div class="header">
+            <p class="title">Analysing local files</p>
         </div>
         <div class="content"></div>
         <div class="footer">
@@ -312,12 +328,31 @@
             <p class="windowSize"></p>
         </div>
     </div>
+    <div id="window-userVerify" class="window">
+        <div class="header">
+            <p class="title">Verify User</p>
+        </div>
+        <div class="content">
+            <p>Verify your Adress:</p>
+            <h2><span class="color-yellow">Alsenmattstrasse 15<br>
+                8800 Thalwil</span></h2>
+            <p class="button" id="button-user-verify"><span class="color-blue">> verify</span></p>
+            <p class="button" id="button-user-decline"><span class="color-blue">> decline</span></p>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
+    </div>
     <div id="window-userData" class="window">
         <div class="header">
             <p class="title">User Data</p>
             <a class="close">[ close ]</a>
         </div>
-        <div class="content"></div>
+        <div class="content">
+            <p>User-ID: 453905202367</p>
+        </div>
         <div class="footer">
             <p>Chiara Tremml</p>
             <p>Status [2]</p>
