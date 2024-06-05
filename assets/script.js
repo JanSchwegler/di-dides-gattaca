@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
         video.autoplay = true;
         video.muted = true;
         video.playsInline = true;
-        video.currentTime = 119;
+        //video.currentTime = 119;
         video.play();
 
         video.addEventListener('ended', function() {
