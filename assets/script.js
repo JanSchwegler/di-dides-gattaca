@@ -110,10 +110,10 @@ let chapterProgress = [
     false, // user login
     true, // chapter 1 - booting up
     true, // chapter 2 - connection
-    true, // chapter 3 - analysing geo location
-    true, // chapter 4 - analysing files
-    true, // chapter 5 - analysing browser history
-    true, // chapter 6 - analysing messages
+    false, // chapter 3 - analysing geo location
+    false, // chapter 4 - analysing files
+    false, // chapter 5 - analysing browser history
+    false, // chapter 6 - analysing messages
     false, // chapter 7 - get first name
     false, // chapter 8 - get last name
     false,  // chapter 9 - get date of birth
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
         video.autoplay = true;
         video.muted = true;
         video.playsInline = true;
-        //video.currentTime = 119;
+        video.currentTime = 119;
         video.play();
 
         video.addEventListener('ended', function() {
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
             bgCanvasGrid.style.opacity = '0.1';
             video.style.opacity = '0';
             intro = true;
-            cd.forEach(cdElement => cdElement.style.display = 'block');
+            cd.forEach(cdElement => cdElement.style.opacity = '1');
             setTimeout(() => {
                 main();
             }, 1000);
@@ -670,9 +670,19 @@ document.addEventListener('DOMContentLoaded', function () {
             
             dataText.forEach(text => content.appendChild(createParagraph(text)));
 
-            windows['window-geolocation'].openWindow();
-            chapterProgress[3] = true;
-            main();
+            let video = document.getElementById('videoAnalyzingLocation');
+            video.play();
+            windows['window-geolocation-video'].openWindow();
+
+            setTimeout(() => {
+                windows['window-geolocation'].openWindow();
+            }, 1000);
+
+            setTimeout(() => {
+                windows['window-geolocation-video'].closeWindow();
+                chapterProgress[3] = true;
+                main();
+            }, 10900);
         }).catch(handleError);
     }
     // chapter 4 - analysing files
