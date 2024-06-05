@@ -119,6 +119,11 @@ let chapterProgress = [
     false,  // chapter 9 - get date of birth
     false, // chapter 10 - user data
     false, // chapter 11 - analysing user data
+    false, // chapter 12 - write text to terminal
+    false, // chapter 13 - analyse typing
+    false, // chapter 14 - pick random number
+    false, // chapter 15 - solve math problem
+    false, // chapter 16 - choose image
 ];
 let cpuUsage = 50;
 let memoryUsage = 25;
@@ -145,6 +150,7 @@ let windowIcon;
 let inputFirstName;
 let inputLastName;
 let inputDateOfBirth;
+let inputRandomNumber;
 
 
 
@@ -408,31 +414,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function handleError() {
         console.error('An error occurred');
     }
-    // get geolocation and display in window
-    /*
-    getGeolocationDetails().then(data => {
-        const createParagraph = text => {
-            const p = document.createElement('p');
-            p.innerHTML = text;
-            return p;
-        };
-        
-        const content = document.querySelector('#window-geolocation .content');
-        const dataText = [
-            'Geolocation Permission Granted<br>Reading data...<br>Analysing data...<br><br>',
-            `Coordinates: ${data.latitude} | ${data.longitude}`,
-            `Country: ${data.country}`,
-            `City: ${data.city}`,
-            `Accuracy: ${data.accuracy}`,
-            `Moving: ${data.moving ? 'Yes' : 'No'}`,
-            `Speed: ${data.speed || 0} m/s`,
-            `Direction: ${data.heading || '-'}`            
-        ];
-        
-        dataText.forEach(text => content.appendChild(createParagraph(text)));
-
-        windows['window-geolocation'].openWindow();
-    }).catch(handleError);*/
 
 
 
@@ -535,6 +516,22 @@ document.addEventListener('DOMContentLoaded', function () {
         switch (chapter) {
             case 'chapter11_3':
                 if (inputText != "453905202367") {
+                    valide = false;
+                }
+                break;
+            case 'chapter12_2':
+                if (inputText != "g7t4cA3T4GB9cX8yZ7") {
+                    valide = false;
+                }
+                break;
+            case 'chapter14_2':
+                let value = parseInt(inputText, 10);
+                if (isNaN(value) || value < 0 || value > 1024) {
+                    valide = false;
+                }
+                break;
+            case 'chapter15_2':
+                if (inputText != "36") {
                     valide = false;
                 }
                 break;
@@ -835,8 +832,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .break().exec(() => scrollOneLineDown())
         .break().exec(() => scrollOneLineDown())
         .type('<span class="color-green">Searching</span> data on user...').break().exec(() => scrollOneLineDown()).pause(2000)
-        //.type('<span class="color-green">Analysing</span> data...').break().exec(() => scrollOneLineDown()).pause(200)
-        //.type('<span class="color-green">Generating</span> report...').break().exec(() => scrollOneLineDown()).pause(200)
         .go();
     }
     function handleChapter10_2() {
@@ -866,7 +861,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         main();
     };
-    // chapter 11 - analysing user data
+    // chapter 11 - analysing user data & check user-id
     let chapter11;
     function handleChapter11() {
         hideCursor('chapter10');
@@ -880,6 +875,9 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .type('<span class="color-green">Analysing</span> user data...').break().exec(() => scrollOneLineDown()).pause(200)
         .type('<span class="color-green">Generating</span> report...').break().exec(() => scrollOneLineDown()).pause(200)
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">PLEASE ENTER YOUR USER-ID:</span>').break().exec(() => scrollOneLineDown()).pause(200)
         .go();
     }
     function handleChapter11_2() {
@@ -891,56 +889,132 @@ document.addEventListener('DOMContentLoaded', function () {
             main();
         });
     }
-
-    // chapter 3 - user information
-    /*
-    let chapter3;
-    function handleChapter2() {
-        fetchPublicIp().then(() => {
-            hideCursor('chapter1');
-
-            chapter2 = new TypeIt(createTextElement('chapter2'), {
-                afterComplete: () => {
-                    chapterProgress[2] = true;
+    // chapter 12 - write text to terminal
+    let chapter12;
+    function handleChapter12() {
+        chapter12 = new TypeIt(createTextElement('chapter12'), {
+            afterComplete: () => {
+                hideCursor('chapter12');
+                windows['window-typetest'].openWindow();
+                createInputElement("chapter12_2").then(input => {
+                    windows['window-typetest'].closeWindow();
+                    chapterProgress[12] = true;
                     main();
-                },
-                cursorChar: "_",
-                waitUntilVisible: true,
-                speed: 80
-            })
-            .break().exec(() => scrollOneLineDown())
-            .type('Network: <span class="color-green">connected</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('IP: <span class="color-yellow">' + publicIp + '</span>').break().exec(() => scrollOneLineDown()).pause(1000)
-            .break().exec(() => scrollOneLineDown())
-            .type('<span class="color-green">Checking </span>hardware integrity...').break().exec(() => scrollOneLineDown()).pause(3000)
-            .type('<span class="color-green">Loading </span>kernal modules...').break().exec(() => scrollOneLineDown()).pause(5000)
-            .type('<span class="color-green">Verifying </span>network connection...').break().exec(() => scrollOneLineDown()).pause(500)
-            .type('<span class="color-green">Starting </span>user interface...').break().exec(() => scrollOneLineDown()).pause(2000)
-            .break().exec(() => scrollOneLineDown())
-            .type('<span class="color-green">Loaded </span>mouseUp ........................... <span class="color-yellow">53%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Loaded </span>keyboardKeydown1 .................. <span class="color-yellow">58%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Loaded </span>keyboardKeydown2 .................. <span class="color-yellow">63%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Loaded </span>keyboardKeydown3 .................. <span class="color-yellow">68%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Loaded </span>keyboardKeydown4 .................. <span class="color-yellow">74%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Loaded </span>keyboardKeydown5 .................. <span class="color-yellow">79%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Loaded </span>keyboardKeydown ................... <span class="color-yellow">84%</span>').break().exec(() => scrollOneLineDown()).pause(200)
-            .type('<span class="color-green">Loaded </span>startup ........................... <span class="color-yellow">89%</span>').break().exec(() => scrollOneLineDown()).pause(1000)
-            .break().exec(() => scrollOneLineDown())
-            .break().exec(() => scrollOneLineDown())
-            .type('<span class="color-blue">PLEASE ENTER YOUR INFORMATION:</span>').break().exec(() => scrollOneLineDown()).pause(100)
-            .break().exec(() => scrollOneLineDown())
-            .type('First Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Vincent Anton').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-            .type('Last Name:<span class="color-blue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('Freeman').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-            .type('Date of Birth:<span class="color-blue">&nbsp;&nbsp;>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('2\\14\\1967').break().exec(() => scrollOneLineDown()).pause(100).options({ speed: 50 }) //17 characters in fist string
-            .break().exec(() => scrollOneLineDown())
-            .break().exec(() => scrollOneLineDown())
-            .type('<span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span>').break().exec(() => scrollOneLineDown()).pause(100)
-            .break().exec(() => scrollOneLineDown())
-            .type('<span class="color-blue">>&nbsp;</span>').pause(1000).options({ speed: 200 }).type('<span class="color-yellow">121</span>').break().exec(() => scrollOneLineDown()).pause(1000).options({ speed: 50 })
-            .break().exec(() => scrollOneLineDown() + hideCursor("chapter2"))
-            .go();
-        });
-    }*/
+                })
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-green">Start</span> typing analysis').break().exec(() => scrollOneLineDown()).pause(100)
+        .type('<span class="color-green">Loading</span> modules...').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Generate</span> code').break().exec(() => scrollOneLineDown()).pause(100)
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">PLEASE ENTER THE CODE FROM THE WINDOW:</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    // chaper 13 - analyse typing
+    let chapter13;
+    function handleChapter13() {
+        chapter13 = new TypeIt(createTextElement('chapter13'), {
+            afterComplete: () => {
+                chapterProgress[13] = true;
+                main();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-green">Analysing</span> key strokes...').break().exec(() => scrollOneLineDown()).pause(300)
+        .type('<span class="color-green">Analysing</span> stroke speed...').break().exec(() => scrollOneLineDown()).pause(500)
+        .type('<span class="color-green">Analysing</span> time needed...').break().exec(() => scrollOneLineDown()).pause(100)
+        .type('<span class="color-green">Analysing</span> mouse movement...').break().exec(() => scrollOneLineDown()).pause(500)
+        .go();
+    }
+    // chapter 14 - pick random number
+    let chapter14;
+    function handleChapter14() {
+        hideCursor('chapter13');
+        chapter14 = new TypeIt(createTextElement('chapter14'), {
+            afterComplete: () => {
+                hideCursor('chapter14');
+                createInputElement("chapter14_2").then(input => {
+                    inputRandomNumber = input;
+                    chapterProgress[14] = true;
+                    main();
+                });
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">PLEASE NAME A NUMBER FROM 0 TO 1024:</span>').break().exec(() => scrollOneLineDown()).pause(200)
+        .break().exec(() => scrollOneLineDown())
+        .go();
+    }
+    // chapter 15 - solve math problem
+    let chapter15;
+    function handleChapter15() {
+        chapter15 = new TypeIt(createTextElement('chapter15'), {
+            afterComplete: () => {
+                hideCursor('chapter15');
+                createInputElement("chapter15_2").then(input => {
+                    chapterProgress[15] = true;
+                    main();
+                });
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('Solve following problem:').break().exec(() => scrollOneLineDown()).pause(200)
+        .break().exec(() => scrollOneLineDown())
+        .type('The given number is: <span class="color-yellow">9</span>').break().exec(() => scrollOneLineDown()).pause(100)
+        .type('<span class="color-yellow">> </span>Multiply the given number with 3').break().exec(() => scrollOneLineDown()).pause(100)
+        .type('<span class="color-yellow">> </span>To the product add 16').break().exec(() => scrollOneLineDown()).pause(100)
+        .type('<span class="color-yellow">> </span>To the sum subtract 7').break().exec(() => scrollOneLineDown()).pause(100)
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">PLEASE ENTER THE RESULT:</span>').break().exec(() => scrollOneLineDown()).pause(100)
+        .go();
+    }
+    // chapter 16 - choose image
+    let chapter16;
+    function handleChapter16() {
+        chapter16 = new TypeIt(createTextElement('chapter16'), {
+            afterComplete: () => {
+                hideCursor('chapter16');
+                windows['window-image1'].openWindow();
+                setTimeout(() => {
+                    windows['window-image2'].closeWindow();
+                }, 200);
+                setTimeout(() => {
+                    windows['window-image3'].openWindow();
+                }, 400);
+                createInputElement("chapter16_2").then(input => {
+                    windows['window-image1'].closeWindow();
+                    windows['window-image2'].closeWindow();
+                    windows['window-image3'].closeWindow();
+                    chapterProgress[16] = true;
+                    main();
+                });
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .type('Choose the image you like the most.').break().exec(() => scrollOneLineDown()).pause(100)
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">PLEASE ENTER THE IMAGE NAME:</span>').break().exec(() => scrollOneLineDown()).pause(1000)
+        .go();
+    }false
+
     // chapter 4 - example
     /*
     let chapter4;
@@ -1025,33 +1099,63 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // chapter 7
+            // chapter 7 - first name
             if (!chapterProgress[7]) {
                 handleChapter7();
                 return;
             }
 
-            // chapter 8
+            // chapter 8 - last name
             if (!chapterProgress[8]) {
                 handleChapter8();
                 return;
             }
 
-            // chapter 9
+            // chapter 9 - date of birth
             if (!chapterProgress[9]) {
                 handleChapter9();
                 return;
             }
 
-            // chapter 10
+            // chapter 10 - user data
             if (!chapterProgress[10]) {
                 handleChapter10_1();
                 return;
             }
 
-            // chapter 11
+            // chapter 11 - analysing user data
             if (!chapterProgress[11]) {
                 handleChapter11();
+                return;
+            }
+
+            // chapter 12 - write text to terminal
+            if (!chapterProgress[12]) {
+                handleChapter12();
+                return;
+            }
+
+            // chapter 13 - analyse typing
+            if (!chapterProgress[13]) {
+                handleChapter13();
+                return;
+            }
+
+            // chapter 14 - pick random number
+            if (!chapterProgress[14]) {
+                handleChapter14();
+                return;
+            }
+
+            // chapter 15 - solve math problem
+            if (!chapterProgress[15]) {
+                handleChapter15();
+                return;
+            }
+
+            // chapter 16 - choose image
+            if (!chapterProgress[16]) {
+                handleChapter16();
                 return;
             }
 
