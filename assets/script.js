@@ -116,7 +116,7 @@ let chapterProgress = [
     false, // chapter 6 - analysing messages
     false, // chapter 7 - get first name
     false, // chapter 8 - get last name
-    false,  // chapter 9 - get date of birth
+    false, // chapter 9 - get date of birth
     false, // chapter 10 - user data
     false, // chapter 11 - analysing user data
     false, // chapter 12 - write text to terminal
@@ -559,16 +559,23 @@ document.addEventListener('DOMContentLoaded', function () {
     - Library: TypeIt (https://typeitjs.com/)
     - Characters per line: 46
 
-    - Text chapter building:
-        - chapter var
-        - hide curser?
-        - new TypeIt instance
-
     - chapers:
         - chapter 1: booting up
-        - chapter 2: user information
-        - chapter 3: user input
-        - chapter 4: example
+        - chapter 2: connection
+        - chapter 3: analysing geo location
+        - chapter 4: analysing files
+        - chapter 5: analysing browser history
+        - chapter 6: analysing messages
+        - chapter 7: get first name
+        - chapter 8: get last name
+        - chapter 9: get date of birth
+        - chapter 10: user data
+        - chapter 11: analysing user data
+        - chapter 12: write text to terminal
+        - chapter 13: analyse typing
+        - chapter 14: pick random number
+        - chapter 15: solve math problem
+        - chapter 16: choose image
     */
     // chapter 1 - booting up
     let chapter1;
@@ -701,7 +708,7 @@ document.addEventListener('DOMContentLoaded', function () {
         windows['window-analysingFiles'].openWindow();
         setTimeout(() => {
             windows['window-analysingFiles'].closeWindow();
-        }, 10000);
+        }, 25000);
 
         chapterProgress[4] = true;
         main();
@@ -725,7 +732,7 @@ document.addEventListener('DOMContentLoaded', function () {
         windows['window-analysingBrowserHistory'].openWindow();
         setTimeout(() => {
             windows['window-analysingBrowserHistory'].closeWindow();
-        }, 6000);
+        }, 20000);
 
         chapterProgress[5] = true;
         main();
@@ -749,7 +756,7 @@ document.addEventListener('DOMContentLoaded', function () {
         windows['window-analysingMessages'].openWindow();
         setTimeout(() => {
             windows['window-analysingMessages'].closeWindow();
-        }, 8000);
+        }, 10000);
 
         chapterProgress[6] = true;
         main();
@@ -992,7 +999,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 hideCursor('chapter16');
                 windows['window-image1'].openWindow();
                 setTimeout(() => {
-                    windows['window-image2'].closeWindow();
+                    windows['window-image2'].openWindow();
                 }, 200);
                 setTimeout(() => {
                     windows['window-image3'].openWindow();
@@ -1013,7 +1020,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .break().exec(() => scrollOneLineDown())
         .type('<span class="color-blue">PLEASE ENTER THE IMAGE NAME:</span>').break().exec(() => scrollOneLineDown()).pause(1000)
         .go();
-    }false
+    }
 
     // chapter 4 - example
     /*
@@ -1164,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
 
             // reset
-            //resetContent(chapters = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10]);
+            //resetContent(chapters = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10, chapter11, chapter12, chapter13, chapter14, chapter15, chapter16]);
             
         }
 
