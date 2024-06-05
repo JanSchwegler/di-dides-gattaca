@@ -107,7 +107,7 @@ let startTime = new Date();
 let started = false;
 let intro = false;
 let chapterProgress = [
-    false, // user login
+    true, // user login
     false, // chapter 1 - booting up
     false, // chapter 2 - connection
     false, // chapter 3 - analysing geo location
