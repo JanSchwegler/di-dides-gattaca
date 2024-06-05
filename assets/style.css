@@ -109,7 +109,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0.03;
+    opacity: 0.06;
     filter: blur(0.6px);
     z-index: 999;
     pointer-events: none;
@@ -296,6 +296,15 @@ body {
     filter: drop-shadow(0 0 30px rgba(35, 35, 35, 0.6));
 }
 
+.window .content h2 {
+    font-size: 2rem;
+}
+
+.window .button {
+    cursor: url('images/cursorPointer.svg') 12 0, auto;
+    user-select: none;
+}
+
 /* //////////////////////////////////////////////////////////////////////////////////////// */
 /* window custom size & position */
 /* //////////////////////////////////////////////////////////////////////////////////////// */
@@ -409,6 +418,13 @@ body {
     height: 500px;
     top: 200px;
     left: 500px;
+}
+
+#window-userVerify {
+    width: 500px;
+    height: 700px;
+    top: 30px;
+    left: 800px;
 }
 
 #window-userData {

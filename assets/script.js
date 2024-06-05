@@ -107,17 +107,18 @@ let startTime = new Date();
 let started = false;
 let intro = false;
 let chapterProgress = [
-    true, // user login
-    false, // chapter 1 - booting up
-    false, // chapter 2 - connection
-    false, // chapter 3 - analysing geo location
-    false, // chapter 4 - analysing files
-    false, // chapter 5 - analysing browser history
-    false, // chapter 6 - analysing messages
+    false, // user login
+    true, // chapter 1 - booting up
+    true, // chapter 2 - connection
+    true, // chapter 3 - analysing geo location
+    true, // chapter 4 - analysing files
+    true, // chapter 5 - analysing browser history
+    true, // chapter 6 - analysing messages
     false, // chapter 7 - get first name
     false, // chapter 8 - get last name
     false,  // chapter 9 - get date of birth
     false, // chapter 10 - user data
+    false, // chapter 11 - analysing user data
 ];
 let cpuUsage = 50;
 let memoryUsage = 25;
@@ -514,7 +515,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (event.key === "Enter") {
                     event.preventDefault();
                     let inputText = spanInputText.textContent;
-                    if (inputText) {
+                    let valide = checkInput(chapter, inputText);
+                    console.log(valide);
+                    if (inputText && valide) {
                         spanInputText.removeAttribute('contenteditable');
                         spanInputText.removeEventListener('keydown', handler);
                         resolve(inputText);
@@ -522,6 +525,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
+    }
+
+
+
+    // check terminal input
+    function checkInput(chapter, inputText) {
+        let valide = true;
+        switch (chapter) {
+            case 'chapter11_3':
+                if (inputText != "453905202367") {
+                    valide = false;
+                }
+                break;
+        }
+        return valide;
     }
 
 
@@ -807,14 +825,61 @@ document.addEventListener('DOMContentLoaded', function () {
         .break().exec(() => scrollOneLineDown())
         .break().exec(() => scrollOneLineDown())
         .type('<span class="color-green">Searching</span> data on user...').break().exec(() => scrollOneLineDown()).pause(2000)
-        .type('<span class="color-green">Analysing</span> data...').break().exec(() => scrollOneLineDown()).pause(200)
-        .type('<span class="color-green">Generating</span> report...').break().exec(() => scrollOneLineDown()).pause(200)
+        //.type('<span class="color-green">Analysing</span> data...').break().exec(() => scrollOneLineDown()).pause(200)
+        //.type('<span class="color-green">Generating</span> report...').break().exec(() => scrollOneLineDown()).pause(200)
         .go();
     }
     function handleChapter10_2() {
-        windows['window-userData'].openWindow();
+        windows['window-userVerify'].openWindow();
         chapterProgress[10] = true;
+    }
+    document.getElementById("button-user-verify").onclick = function() {
+        windows['window-userVerify'].closeWindow();
         main();
+    };
+    document.getElementById("button-user-decline").onclick = function() {
+        windows['window-userVerify'].closeWindow();
+        hideCursor('chapter10');
+
+        const classesToChange = ['chapter7', 'chapter7_2', 'chapter8', 'chapter8_2', 'chapter9', 'chapter9_2', 'chapter10'];
+        classesToChange.forEach(function(className) {
+            const elements = document.querySelectorAll(`#terminal-content .${className}`);
+            elements.forEach(function(element) {
+                element.classList.replace(className, `${className}_old`);
+            });
+        });
+        
+        chapterProgress[7] = false;
+        chapterProgress[8] = false;
+        chapterProgress[9] = false;
+        chapterProgress[10] = false;
+        
+        main();
+    };
+    // chapter 11 - analysing user data
+    let chapter11;
+    function handleChapter11() {
+        hideCursor('chapter10');
+        chapter11 = new TypeIt(createTextElement('chapter11'), {
+            afterComplete: () => {
+                handleChapter11_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .type('<span class="color-green">Analysing</span> user data...').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Generating</span> report...').break().exec(() => scrollOneLineDown()).pause(200)
+        .go();
+    }
+    function handleChapter11_2() {
+        windows['window-userData'].openWindow();
+        hideCursor('chapter11');
+
+        createInputElement("chapter11_3").then(input => {
+            chapterProgress[11] = true;
+            main();
+        });
     }
 
     // chapter 3 - user information
@@ -971,6 +1036,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // chapter 10
             if (!chapterProgress[10]) {
                 handleChapter10_1();
+                return;
+            }
+
+            // chapter 11
+            if (!chapterProgress[11]) {
+                handleChapter11();
                 return;
             }
 
