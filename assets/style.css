@@ -401,8 +401,8 @@ body {
 #window-search {
     width: 802px;
     height: 474px;
-    top: 20%;
-    left: 20%;
+    top: 150px;
+    left: 400px;
 }
 
 #window-search .content {
@@ -479,56 +479,56 @@ body {
     width: 120px;
 }
 
-#window-dashboard #window-file-stillframe-01 {
-    width: 800px;
+#window-file-stillframe-01 {
+    width: 900px;
     height: auto;
-    top: 50px;
-    left: 100px;
+    top: 75px;
+    left: 125px;
 }
 
-#window-dashboard #window-file-stillframe-02 {
-    width: 800px;
+#window-file-stillframe-02 {
+    width: 900px;
     height: auto;
-    top: 100px;
-    left: 150px;
+    top: 125px;
+    left: 175px;
 }
 
-#window-dashboard #window-file-stillframe-03 {
-    width: 800px;
+#window-file-stillframe-03 {
+    width: 900px;
     height: auto;
-    top: 150px;
-    left: 200px;
+    top: 175px;
+    left: 225px;
 }
 
-#window-dashboard #window-file-stillframe-04 {
-    width: 800px;
+#window-file-stillframe-04 {
+    width: 900px;
     height: auto;
-    top: 200px;
-    left: 250px;
+    top: 225px;
+    left: 275px;
 }
 
-#window-dashboard #window-file-stillframe-05 {
-    width: 800px;
+#window-file-stillframe-05 {
+    width: 900px;
     height: auto;
-    top: 250px;
-    left: 300px;
+    top: 275px;
+    left: 325px;
 }
 
-#window-dashboard #window-file-stillframe-06 {
-    width: 800px;
+#window-file-stillframe-06 {
+    width: 900px;
     height: auto;
-    top: 300px;
-    left: 350px;
+    top: 325px;
+    left: 375px;
 }
 
-#window-dashboard #window-file-stillframe-01 img, #window-dashboard #window-file-stillframe-02 img, #window-dashboard #window-file-stillframe-03 img, #window-dashboard #window-file-stillframe-04 img, #window-dashboard #window-file-stillframe-05 img, #window-dashboard #window-file-stillframe-06 img {
+#window-file-stillframe-01 img, #window-file-stillframe-02 img, #window-file-stillframe-03 img, #window-file-stillframe-04 img, #window-file-stillframe-05 img, #window-file-stillframe-06 img {
     width: 100%;
 }
 
 #window-fileSystem {
-    top: 200px;
-    left: 300px;
-    width: 800px;
+    top: 400px;
+    left: 100px;
+    width: 1100px;
     height: 500px;
 }
 
@@ -562,17 +562,32 @@ body {
     color: var(--white);
 }
 
+#window-file-script-gattaca {
+    width: 800px;
+    height: 700px;
+    top: 120px;
+    left: 500px;
+}
+
 #window-file-script-gattaca .content {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 10px;
+    pointer-events: none;
 }
 
 #window-file-script-gattaca .content img {
     width: 100%;
     mix-blend-mode: plus-lighter;
     z-index: -1;
+}
+
+#window-file-analysis-report {
+    width: 600px;
+    height: 900px;
+    top: 25px;
+    left: 900px;
 }
 
 #window-geolocation {
