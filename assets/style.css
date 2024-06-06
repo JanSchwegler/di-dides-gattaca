@@ -401,8 +401,8 @@ body {
 #window-search {
     width: 802px;
     height: 474px;
-    top: 150px;
-    left: 400px;
+    top: 300px;
+    left: 650px;
 }
 
 #window-search .content {
@@ -480,45 +480,42 @@ body {
 }
 
 #window-file-stillframe-01 {
-    width: 900px;
-    height: auto;
     top: 75px;
     left: 125px;
 }
 
 #window-file-stillframe-02 {
-    width: 900px;
-    height: auto;
     top: 125px;
     left: 175px;
 }
 
 #window-file-stillframe-03 {
-    width: 900px;
-    height: auto;
     top: 175px;
     left: 225px;
 }
 
 #window-file-stillframe-04 {
-    width: 900px;
-    height: auto;
     top: 225px;
     left: 275px;
 }
 
 #window-file-stillframe-05 {
-    width: 900px;
-    height: auto;
     top: 275px;
     left: 325px;
 }
 
 #window-file-stillframe-06 {
-    width: 900px;
-    height: auto;
     top: 325px;
     left: 375px;
+}
+
+#window-file-stillframe-01, #window-file-stillframe-02, #window-file-stillframe-03, #window-file-stillframe-04, #window-file-stillframe-05, #window-file-stillframe-06 {
+    width: 900px;
+    height: auto;
+}
+
+#window-file-stillframe-01 .content, #window-file-stillframe-02 .content, #window-file-stillframe-03 .content, #window-file-stillframe-04 .content, #window-file-stillframe-05 .content, #window-file-stillframe-06 .content {
+    padding: 0;
 }
 
 #window-file-stillframe-01 img, #window-file-stillframe-02 img, #window-file-stillframe-03 img, #window-file-stillframe-04 img, #window-file-stillframe-05 img, #window-file-stillframe-06 img {
@@ -593,7 +590,7 @@ body {
 #window-geolocation {
     width: 400px;
     height: 400px;
-    top: 50px;
+    top: 80px;
     left: calc(100% - 480px);
 }
 
@@ -617,29 +614,29 @@ body {
 }
 
 #window-analysingFiles {
-    width: 50vw;
-    height: 500px;
+    width: 700px;
+    height: 645px;
     top: 100px;
-    left: 400px;
+    left: 200px;
 }
 
 #window-analysingBrowserHistory {
-    width: 50vw;
-    height: 500px;
-    top: 150px;
-    left: 450px;
+    width: 600px;
+    height: 800px;
+    top: 50px;
+    left: 700px;
 }
 
 #window-analysingMessages {
-    width: 50vw;
-    height: 500px;
+    width: 700px;
+    height: 600px;
     top: 200px;
-    left: 500px;
+    left: 350px;
 }
 
 #window-userVerify {
     width: 500px;
-    height: 400px;
+    height: 350px;
     top: 150px;
     left: 500px;
 }
@@ -647,7 +644,7 @@ body {
 #window-userData {
     width: 500px;
     height: 700px;
-    top: 30px;
+    top: 130px;
     left: 800px;
 }
 

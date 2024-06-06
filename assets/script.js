@@ -107,22 +107,22 @@ let startTime = new Date();
 let started = false;
 let intro = false;
 let chapterProgress = [
-    true, // user login
-    true, // chapter 1 - booting up
-    true, // chapter 2 - connection
-    true, // chapter 3 - analysing geo location
-    true, // chapter 4 - analysing files
-    true, // chapter 5 - analysing browser history
-    true, // chapter 6 - analysing messages
-    true, // chapter 7 - get first name
-    true, // chapter 8 - get last name
-    true, // chapter 9 - get date of birth
-    true, // chapter 10 - user data
-    true, // chapter 11 - analysing user data
-    true, // chapter 12 - write text to terminal
-    true, // chapter 13 - analyse typing
-    true, // chapter 14 - pick random number
-    true, // chapter 15 - solve math problem
+    false, // user login
+    false, // chapter 1 - booting up
+    false, // chapter 2 - connection
+    false, // chapter 3 - analysing geo location
+    false, // chapter 4 - analysing files
+    false, // chapter 5 - analysing browser history
+    false, // chapter 6 - analysing messages
+    false, // chapter 7 - get first name
+    false, // chapter 8 - get last name
+    false, // chapter 9 - get date of birth
+    false, // chapter 10 - user data
+    false, // chapter 11 - analysing user data
+    false, // chapter 12 - write text to terminal
+    false, // chapter 13 - analyse typing
+    false, // chapter 14 - pick random number
+    false, // chapter 15 - solve math problem
     false, // chapter 16 - choose image
 ];
 let cpuUsage = 50;
@@ -712,7 +712,7 @@ document.addEventListener('DOMContentLoaded', function () {
             waitUntilVisible: true,
             speed: 20
         })
-        .type('<span class="color-green">Analysing</span> local files...').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Analysing</span> local files...').break().exec(() => scrollOneLineDown()).pause(100)
         .go();
     }
     function handleChapter4_2() {
@@ -720,6 +720,10 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             windows['window-analysingFiles'].closeWindow();
         }, 25000);
+
+        setTimeout(() => {
+            windows['window-geolocation'].closeWindow();
+        }, 26000);
 
         chapterProgress[4] = true;
         main();
@@ -736,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function () {
             waitUntilVisible: true,
             speed: 20
         })
-        .type('<span class="color-green">Analysing</span> web browsing history...').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Analysing</span> web browsing history...').break().exec(() => scrollOneLineDown()).pause(100)
         .go();
     }
     function handleChapter5_2() {
@@ -760,7 +764,7 @@ document.addEventListener('DOMContentLoaded', function () {
             waitUntilVisible: true,
             speed: 20
         })
-        .type('<span class="color-green">Analysing</span> messages...').break().exec(() => scrollOneLineDown()).pause(200)
+        .type('<span class="color-green">Analysing</span> messages...').break().exec(() => scrollOneLineDown()).pause(100)
         .go();
     }
     function handleChapter6_2() {
@@ -903,6 +907,7 @@ document.addEventListener('DOMContentLoaded', function () {
         hideCursor('chapter11');
 
         createInputElement("chapter11_3").then(input => {
+            windows['window-userData'].closeWindow();
             chapterProgress[11] = true;
             main();
         });
