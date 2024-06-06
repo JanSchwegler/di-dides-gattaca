@@ -108,22 +108,24 @@ let started = false;
 let intro = false;
 let chapterProgress = [
     false, // user login
-    false, // chapter 1 - booting up
-    false, // chapter 2 - connection
-    false, // chapter 3 - analysing geo location
-    false, // chapter 4 - analysing files
-    false, // chapter 5 - analysing browser history
-    false, // chapter 6 - analysing messages
-    false, // chapter 7 - get first name
-    false, // chapter 8 - get last name
-    false, // chapter 9 - get date of birth
-    false, // chapter 10 - user data
-    false, // chapter 11 - analysing user data
-    false, // chapter 12 - write text to terminal
-    false, // chapter 13 - analyse typing
-    false, // chapter 14 - pick random number
-    false, // chapter 15 - solve math problem
-    false, // chapter 16 - choose image
+    true, // chapter 1 - booting up
+    true, // chapter 2 - connection
+    true, // chapter 3 - analysing geo location
+    true, // chapter 4 - analysing files
+    true, // chapter 5 - analysing browser history
+    true, // chapter 6 - analysing messages
+    true, // chapter 7 - get first name
+    true, // chapter 8 - get last name
+    true, // chapter 9 - get date of birth
+    true, // chapter 10 - user data
+    true, // chapter 11 - analysing user data
+    true, // chapter 12 - write text to terminal
+    true, // chapter 13 - analyse typing
+    true, // chapter 14 - pick random number
+    true, // chapter 15 - solve math problem
+    true, // chapter 16 - choose image
+    false, // chapter 17 - mouse movement
+    false, // chapter 18 - resize window
 ];
 let cpuUsage = 50;
 let memoryUsage = 25;
@@ -350,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function () {
         video.playsInline = true;
         audioBackground.play();
         setTimeout(() => {
-            //video.currentTime = 119;
+            video.currentTime = 119;
             video.play();
         }, 1200);
 
@@ -503,7 +505,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     event.preventDefault();
                     let inputText = spanInputText.textContent;
                     let valide = checkInput(chapter, inputText);
-                    console.log(valide);
                     if (inputText && valide) {
                         spanInputText.removeAttribute('contenteditable');
                         spanInputText.removeEventListener('keydown', handler);
@@ -561,6 +562,41 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
+
+
+
+    // functions - mouse movement
+    function createBlocks() {
+        const blockContainer = document.getElementById("blocks-container");
+        const blockSize = 25;
+        const screenWidth = 1000;
+        const screenHeight = 600;
+        const numCols = Math.ceil(screenWidth / blockSize);
+        const numRows = Math.ceil(screenHeight / blockSize);
+        const numBlocks = numCols * numRows;
+    
+        for (let i = 0; i < numBlocks; i++) {
+          const block = document.createElement("div");
+          block.classList.add("block");
+          block.dataset.index = i;
+          block.addEventListener("mousemove", setHighlight);
+          blockContainer.appendChild(block);
+        }
+    }
+    function setHighlight() {
+        this.classList.add("highlight");
+        this.addEventListener("mouseleave", removeHighlight);
+    }
+    function removeHighlight() {
+        this.removeEventListener("mouseleave", removeHighlight);
+        setTimeout(() => {
+          this.classList.remove("highlight");
+        }, 300);
+    }
+    function removeBlocks() {
+        const blockContainer = document.getElementById("blocks-container");
+        blockContainer.innerHTML = '';
+    }
     
     
 
@@ -615,12 +651,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .type('Cookies Available: ' + navigator.cookieEnabled).break().exec(() => scrollOneLineDown()).pause(200)
         .type('Local Storage Available: ' + (typeof(Storage) !== "undefined")).break().exec(() => scrollOneLineDown()).pause(500)
         .go();
-        /*
-
-        Later:
-        - connection type: 
-        - downlink speed:
-        */
     }
     // chapter 2 - connection
     let chapter2;
@@ -1039,6 +1069,111 @@ document.addEventListener('DOMContentLoaded', function () {
         .type('<span class="color-blue">PLEASE ENTER THE IMAGE NAME:</span>').break().exec(() => scrollOneLineDown()).pause(1000)
         .go();
     }
+    // chapter 17 - mouse movement
+    let chapter17;
+    function handleChapter17() {
+        chapter17 = new TypeIt(createTextElement('chapter17'), {
+            afterComplete: () => {
+                handleChapter17_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">MOVE YOUR MOUSE ON THE OPEN WINDOW</span>').break().exec(() => scrollOneLineDown()).pause(100)
+        .go();
+    }
+    function handleChapter17_2() {
+        createBlocks();
+        setTimeout(() => {
+            windows['window-mouse-move'].openWindow();
+        }, 500);
+
+        let done = false;
+        let previousX = null;
+        let previousY = null;
+        let totalDistance = 0;
+        const blockContainer = document.querySelector("#window-mouse-move #blocks-container");
+
+        blockContainer.addEventListener('mousemove', (event) => {
+            const rect = blockContainer.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            if (previousX !== null && previousY !== null) {
+                const dx = x - previousX;
+                const dy = y - previousY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                totalDistance += distance;
+            }
+
+            previousX = x;
+            previousY = y;
+
+            if (totalDistance > 12000 && !done) {
+                done = true;
+                windows['window-mouse-move'].closeWindow();
+                removeBlocks();
+                chapterProgress[17] = true;
+                main();
+                return;
+            }
+        });
+    }
+    // chapter 18 - mouse movement horizontally
+    let chapter18;
+    function handleChapter18() {
+        chapter18 = new TypeIt(createTextElement('chapter18'), {
+            afterComplete: () => {
+                handleChapter18_2();
+            },
+            cursorChar: "_",
+            waitUntilVisible: true,
+            speed: 20
+        })
+        .break().exec(() => scrollOneLineDown())
+        .break().exec(() => scrollOneLineDown())
+        .type('<span class="color-blue">MOVE YOUR MOUSE IN A STRAIGHT LINE HORIZONTALLY</span>').break().exec(() => scrollOneLineDown()).pause(100)
+        .go();
+    }
+    function handleChapter18_2() {
+        createBlocks();
+        document.querySelector("#window-mouse-move .content h2 span").innerHTML = "Move your mouse in a<br>straight line horizontally";
+        setTimeout(() => {
+            windows['window-mouse-move'].openWindow();
+        }, 500);
+
+        let done = false;
+        let previousX = null;
+        let previousY = null;
+        let totalDistance = 0;
+        const blockContainer = document.querySelector("#window-mouse-move #blocks-container");
+
+        blockContainer.addEventListener('mousemove', (event) => {
+            const rect = blockContainer.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+
+            if (previousX !== null) {
+                const dx = Math.abs(x - previousX);
+                totalDistance += dx;
+            }
+
+            previousX = x;
+
+            if (totalDistance > 3000 && !done) {
+                done = true;
+                windows['window-mouse-move'].closeWindow();
+                removeBlocks();
+                chapterProgress[18] = true;
+                setTimeout(() => {
+                    main();
+                }, 600);
+                return;
+            }
+        });
+    }
 
     // chapter 4 - example
     /*
@@ -1184,6 +1319,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
+            // chapter 17 - mouse movement
+            if (!chapterProgress[17]) {
+                handleChapter17();
+                return;
+            }
+
+            // chapter 18 - mouse movement horizontally
+            if (!chapterProgress[18]) {
+                handleChapter18();
+                return;
+            }
+
             // transition to dashboard
             handleTransitionToDashboard();
             return;
@@ -1237,14 +1384,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         resizeObserver.observe(window);
     });
-    /* example open and close windows
-    console.log(windows);
-    windows['window-image'].openWindow();
-    setTimeout(() => {
-        windows['window-image'].closeWindow();
-    }, 5000);
-    */
-
       
 
 

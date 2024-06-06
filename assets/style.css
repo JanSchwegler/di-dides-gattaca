@@ -676,6 +676,53 @@ body {
     left: 400px;
 }
 
+#window-mouse-move {
+    width: auto;
+    height: auto;
+    top: 150px;
+    left: 250px;
+}
+
+#window-mouse-move .content {
+    padding: 0;
+    width: 1000px;
+    height: 600px;
+    position: relative;
+}
+
+#window-mouse-move #blocks-container {
+    width: 1000px;
+    height: 600px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 25px);
+    grid-template-rows: repeat(auto-fill, 25px);
+}
+
+#window-mouse-move .block {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #1a1a1a;
+    transition: border-color 0.3s ease;
+}
+
+#window-mouse-move .highlight {
+    border-color: #ffec1a;
+    background-color: #ffec1a;
+}
+
+#window-mouse-move .content h2, #window-mouse-move .content p {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#window-mouse-move .content p {
+    top: auto;
+    bottom: 40px;
+}
+
 /* //////////////////////////////////////////////////////////////////////////////////////// */
 /* //////////////////////////////////////////////////////////////////////////////////////// */
 
