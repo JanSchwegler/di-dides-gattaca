@@ -462,6 +462,18 @@ body {
     height: auto;
 }
 
+#window-dashboard #dashboard-system .dashboard-col-2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 30px;
+}
+
+#window-dashboard #dashboard-system .dashboard-col-2 img {
+    width: 120px;
+}
+
 #window-fileSystem {
     top: 200px;
     left: 300px;
