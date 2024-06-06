@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function () {
         video.playsInline = true;
         audioBackground.play();
         setTimeout(() => {
-            video.currentTime = 119;
+            //video.currentTime = 119;
             video.play();
         }, 1200);
 

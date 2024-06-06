@@ -475,7 +475,7 @@ body {
     gap: 30px;
 }
 
-#window-dashboard #dashboard-system .dashboard-col-2 img {
+#window-dashboard #dashboard-system .dashboard-col-2 img, #window-dashboard #dashboard-system .dashboard-col-2 video {
     width: 120px;
 }
 
