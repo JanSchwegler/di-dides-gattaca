@@ -1125,6 +1125,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // chapter 18 - mouse movement horizontally
     let chapter18;
     function handleChapter18() {
+        hideCursor('chapter17');
         chapter18 = new TypeIt(createTextElement('chapter18'), {
             afterComplete: () => {
                 handleChapter18_2();
