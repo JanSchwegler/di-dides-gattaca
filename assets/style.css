@@ -321,12 +321,96 @@ body {
 #window-chat {
     top: 10%;
     left: 10%;
+    width: 800px;
+    height: 550px;
+}
+
+#window-chat .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#window-chat .content h2 {
+    margin-bottom: 40px;
+}
+
+#window-chat .content input {
+    display: none;
+}
+
+#window-chat .content label, #window-chat .content p {
+    color: var(--grey);
+}
+
+#window-chat .content label {
+    color: var(--grey);
+    cursor: url('images/cursorPointer.svg') 12 0, auto;
+}
+
+#window-chat .content label:hover {
+    color: var(--white);
+}
+
+#window-chat .content input:checked + label {
+    color: var(--yellow);
+}
+
+#window-chat .content #chathistory {
+    position: relative;
+    z-index: -1;
+    top: -455px;
+    left: 350px;
+    width: 402px;
+    min-width: 400px;
+    border: solid 1px var(--white);
+    padding-bottom: 10px;
+}
+
+#window-chat .content #chathistory .chat-header {
+    border-bottom: solid 1px var(--white);
+    padding: 8px;
+    margin-bottom: 20px;
+    color: var(--grey);
+}
+
+#window-chat .content #chathistory p {
+    padding: 0 10px;
+    color: var(--white);
+}
+
+#window-chat .content #chathistory p.color-yellow {
+    text-align: right;
+    color: var(--yellow);
+}
+
+#window-chat .content #chathistory>div {
+    display: none;
+}
+
+#window-chat #tab1:checked ~ #chathistory #content1,
+#window-chat #tab2:checked ~ #chathistory #content2,
+#window-chat #tab3:checked ~ #chathistory #content3,
+#window-chat #tab4:checked ~ #chathistory #content4,
+#window-chat #tab5:checked ~ #chathistory #content5,
+#window-chat #tab6:checked ~ #chathistory #content6 {
+  display: block;
 }
 
 #window-search {
+    width: 802px;
+    height: 474px;
     top: 20%;
     left: 20%;
 }
+#window-search .content {
+    padding: 0;
+    overflow: hidden;
+    width: 800px;
+    height: 400px;
+}
+
 
 #window-dashboard {
     top: 200px;

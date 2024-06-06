@@ -107,7 +107,7 @@ let startTime = new Date();
 let started = false;
 let intro = false;
 let chapterProgress = [
-    false, // user login
+    true, // user login
     false, // chapter 1 - booting up
     false, // chapter 2 - connection
     false, // chapter 3 - analysing geo location
@@ -146,7 +146,10 @@ let cdMemory;
 let cdStorage;
 let windowIcon;
 
-// user inputs
+// variables - audio
+let audioBackground = new Audio('assets/computer-sound.mp3');
+
+// variables - user inputs
 let inputFirstName;
 let inputLastName;
 let inputDateOfBirth;
@@ -345,8 +348,11 @@ document.addEventListener('DOMContentLoaded', function () {
         video.autoplay = true;
         video.muted = true;
         video.playsInline = true;
-        //video.currentTime = 119;
-        video.play();
+        audioBackground.play();
+        setTimeout(() => {
+            video.currentTime = 119;
+            video.play();
+        }, 1200);
 
         video.addEventListener('ended', function() {
             video.removeEventListener('ended', this);
