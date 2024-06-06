@@ -1,783 +1,596 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GTCA OS</title>
-    <link rel="stylesheet" href="assets/style.css" />
-    <script
-      src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"
-      defer
-    ></script>
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js" defer></script>
     <script src="assets/script.js" defer></script>
-  </head>
-  <body>
+</head>
+<body>
     <div id="bgGridContainer">
-      <canvas id="bgGrid"></canvas>
+        <canvas id="bgGrid"></canvas>
     </div>
     <canvas id="bgNoise"></canvas>
     <video id="introContainer" muted playsinline>
-      <source src="assets/videos/intro_02.mp4" type="video/mp4" />
+        <source src="assets/videos/intro_02.mp4" type="video/mp4">
     </video>
-    <p class="cornerdata">
-      GTCA
-      <span id="systemInfo">
-        System Initialization Complete<br />
-        <span id="systemInfoUser"></span><br />
-        <span id="systemInfoStartup"></span><br />
-        <span id="systemInfoUptime"></span><br />
-        <span id="systemInfoCpu"></span><br />
-        <span id="systemInfoMemory"></span><br />
-        <span id="systemInfoStorage">Storage: 34.7 % | 1.735 GB</span>
-      </span>
+    <p class="cornerdata">GTCA
+        <span id="systemInfo">
+            System Initialization Complete<br>
+            <span id="systemInfoUser"></span><br>
+            <span id="systemInfoStartup"></span><br>
+            <span id="systemInfoUptime"></span><br>
+            <span id="systemInfoCpu"></span><br>
+            <span id="systemInfoMemory"></span><br>
+            <span id="systemInfoStorage">Storage: 34.7 % | 1.735 GB</span>
+        </span>
     </p>
     <p class="cornerdata">Version 10.0.22631.3447</p>
     <p id="cd-time" class="cornerdata"></p>
     <p id="cd-ip" class="cornerdata"></p>
     <p class="cornerdata">Xeon W-3275M 2.5GHz</p>
-    <p id="cd-mouse" class="cornerdata"></p>
+    <p id="cd-mouse"class="cornerdata"></p>
 
     <section id="terminal">
-      <div id="terminal-content"></div>
+        <div id="terminal-content">
+        </div>
     </section>
-
+    
     <!-- Window Icons -->
     <div class="windowIcon" data-window="window-chat">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="39"
-        height="31"
-        viewBox="0 0 39 31"
-        fill="none"
-      >
-        <path
-          d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-          fill="#FFEC1A"
-        />
-        <rect
-          x="15.1106"
-          y="23.3937"
-          width="2.48981"
-          height="3.40559"
-          fill="#FFEC1A"
-        />
-        <rect
-          x="17.6003"
-          y="26.7993"
-          width="2.48981"
-          height="3.40559"
-          fill="#FFEC1A"
-        />
-      </svg>
-      <p>Chat</p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+            <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+            <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+            <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+          </svg>
+        <p>Chat</p>
     </div>
     <div class="windowIcon" data-window="window-search">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="45"
-        height="45"
-        viewBox="0 0 45 45"
-        fill="none"
-      >
-        <path
-          d="M42.5804 14.8933V21.939H33.8663V13.1334H32.1246V7.8536H30.3829V13.1334H23.4104V2.56777H25.1521V4.32774H26.8937V2.56777H30.3829V0.8078H14.6963V2.56777H18.1797V4.32774H19.9213V2.56777H21.6691V13.1334H14.6966V7.8536H12.9549V13.1334H11.2072V21.939H2.49302V14.8933H0.751343V30.7447H2.49302V23.705H11.2072V32.5107H12.9549V37.7905H14.6966V32.5107H21.6691V43.0763H19.9213V41.3163H18.1797V43.0763H16.438V44.8363H28.6414V43.0763H26.8936V41.3163H25.152V43.0763H23.4103V32.5107H30.3828V37.7905H32.1245V32.5107H33.8661V23.705H42.5803V30.7447H44.328V14.8933H42.5803H42.5804ZM32.1246 14.8933V21.939H23.4105V14.8933H32.1246ZM12.9547 14.8933H21.6689V21.939H12.9547V14.8933ZM12.9547 30.7447V23.705H21.6689V30.7447H12.9547ZM32.1246 30.7447H23.4105V23.705H32.1246V30.7447Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M40.8407 30.7447H42.5824V34.2706H40.8407V30.7447Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M40.8407 11.3795H42.5824V14.8995H40.8407V11.3795Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M39.0991 34.2706H40.8408V36.0306H39.0991V34.2706Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M39.0991 9.61352H40.8408V11.3735H39.0991V9.61352Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M37.3575 36.0366H39.0992V37.7966H37.3575V36.0366Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M37.3575 7.85966H39.0992V9.61963H37.3575V7.85966Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M35.6099 37.7905H37.3576V39.5566H35.6099V37.7905Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M33.8683 11.3795H39.0992V13.1395H33.8683V11.3795Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M35.6099 6.08761H37.3576V7.8537H35.6099V6.08761Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M33.8683 39.5625H35.61V41.3225H33.8683V39.5625Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M33.8683 32.5168H39.0992V34.2767H33.8683V32.5168Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M33.8683 4.33376H35.61V6.09373H33.8683V4.33376Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M28.6434 41.3164H33.8683V43.0763H28.6434V41.3164Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M30.385 2.56776H33.8684V4.32774H30.385V2.56776Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M28.6434 37.7905H30.3851V39.5566H28.6434V37.7905Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M28.6434 6.08761H30.3851V7.8537H28.6434V6.08761Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M26.8958 39.5625H28.6435V41.3225H26.8958V39.5625Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M26.8958 4.33376H28.6435V6.09373H26.8958V4.33376Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M16.4401 39.5625H18.1817V41.3225H16.4401V39.5625Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M16.4401 4.33376H18.1817V6.09373H16.4401V4.33376Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M11.2091 41.3164H16.44V43.0763H11.2091V41.3164Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M14.6984 37.7905H16.44V39.5566H14.6984V37.7905Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M14.6984 6.08761H16.44V7.8537H14.6984V6.08761Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M11.2091 2.56776H14.6983V4.32774H11.2091V2.56776Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M9.46753 39.5625H11.2092V41.3225H9.46753V39.5625Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M5.98425 11.3795H11.2091V13.1395H5.98425V11.3795Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M9.46753 4.33376H11.2092V6.09373H9.46753V4.33376Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M7.72583 37.7905H9.46751V39.5566H7.72583V37.7905Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M5.98425 32.5168H11.2091V34.2767H5.98425V32.5168Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M7.72583 6.08761H9.46751V7.8537H7.72583V6.08761Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M5.98425 36.0366H7.72593V37.7966H5.98425V36.0366Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M5.98425 7.85966H7.72593V9.61963H5.98425V7.85966Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M4.23657 34.2706H5.9843V36.0306H4.23657V34.2706Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M4.23657 9.61352H5.9843V11.3735H4.23657V9.61352Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M2.495 30.7447H4.23667V34.2706H2.495V30.7447Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M2.495 11.3795H4.23667V14.8995H2.495V11.3795Z"
-          fill="#FFEC1A"
-        />
-      </svg>
-      <p>Search</p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45" fill="none">
+            <path d="M42.5804 14.8933V21.939H33.8663V13.1334H32.1246V7.8536H30.3829V13.1334H23.4104V2.56777H25.1521V4.32774H26.8937V2.56777H30.3829V0.8078H14.6963V2.56777H18.1797V4.32774H19.9213V2.56777H21.6691V13.1334H14.6966V7.8536H12.9549V13.1334H11.2072V21.939H2.49302V14.8933H0.751343V30.7447H2.49302V23.705H11.2072V32.5107H12.9549V37.7905H14.6966V32.5107H21.6691V43.0763H19.9213V41.3163H18.1797V43.0763H16.438V44.8363H28.6414V43.0763H26.8936V41.3163H25.152V43.0763H23.4103V32.5107H30.3828V37.7905H32.1245V32.5107H33.8661V23.705H42.5803V30.7447H44.328V14.8933H42.5803H42.5804ZM32.1246 14.8933V21.939H23.4105V14.8933H32.1246ZM12.9547 14.8933H21.6689V21.939H12.9547V14.8933ZM12.9547 30.7447V23.705H21.6689V30.7447H12.9547ZM32.1246 30.7447H23.4105V23.705H32.1246V30.7447Z" fill="#FFEC1A"/>
+            <path d="M40.8407 30.7447H42.5824V34.2706H40.8407V30.7447Z" fill="#FFEC1A"/>
+            <path d="M40.8407 11.3795H42.5824V14.8995H40.8407V11.3795Z" fill="#FFEC1A"/>
+            <path d="M39.0991 34.2706H40.8408V36.0306H39.0991V34.2706Z" fill="#FFEC1A"/>
+            <path d="M39.0991 9.61352H40.8408V11.3735H39.0991V9.61352Z" fill="#FFEC1A"/>
+            <path d="M37.3575 36.0366H39.0992V37.7966H37.3575V36.0366Z" fill="#FFEC1A"/>
+            <path d="M37.3575 7.85966H39.0992V9.61963H37.3575V7.85966Z" fill="#FFEC1A"/>
+            <path d="M35.6099 37.7905H37.3576V39.5566H35.6099V37.7905Z" fill="#FFEC1A"/>
+            <path d="M33.8683 11.3795H39.0992V13.1395H33.8683V11.3795Z" fill="#FFEC1A"/>
+            <path d="M35.6099 6.08761H37.3576V7.8537H35.6099V6.08761Z" fill="#FFEC1A"/>
+            <path d="M33.8683 39.5625H35.61V41.3225H33.8683V39.5625Z" fill="#FFEC1A"/>
+            <path d="M33.8683 32.5168H39.0992V34.2767H33.8683V32.5168Z" fill="#FFEC1A"/>
+            <path d="M33.8683 4.33376H35.61V6.09373H33.8683V4.33376Z" fill="#FFEC1A"/>
+            <path d="M28.6434 41.3164H33.8683V43.0763H28.6434V41.3164Z" fill="#FFEC1A"/>
+            <path d="M30.385 2.56776H33.8684V4.32774H30.385V2.56776Z" fill="#FFEC1A"/>
+            <path d="M28.6434 37.7905H30.3851V39.5566H28.6434V37.7905Z" fill="#FFEC1A"/>
+            <path d="M28.6434 6.08761H30.3851V7.8537H28.6434V6.08761Z" fill="#FFEC1A"/>
+            <path d="M26.8958 39.5625H28.6435V41.3225H26.8958V39.5625Z" fill="#FFEC1A"/>
+            <path d="M26.8958 4.33376H28.6435V6.09373H26.8958V4.33376Z" fill="#FFEC1A"/>
+            <path d="M16.4401 39.5625H18.1817V41.3225H16.4401V39.5625Z" fill="#FFEC1A"/>
+            <path d="M16.4401 4.33376H18.1817V6.09373H16.4401V4.33376Z" fill="#FFEC1A"/>
+            <path d="M11.2091 41.3164H16.44V43.0763H11.2091V41.3164Z" fill="#FFEC1A"/>
+            <path d="M14.6984 37.7905H16.44V39.5566H14.6984V37.7905Z" fill="#FFEC1A"/>
+            <path d="M14.6984 6.08761H16.44V7.8537H14.6984V6.08761Z" fill="#FFEC1A"/>
+            <path d="M11.2091 2.56776H14.6983V4.32774H11.2091V2.56776Z" fill="#FFEC1A"/>
+            <path d="M9.46753 39.5625H11.2092V41.3225H9.46753V39.5625Z" fill="#FFEC1A"/>
+            <path d="M5.98425 11.3795H11.2091V13.1395H5.98425V11.3795Z" fill="#FFEC1A"/>
+            <path d="M9.46753 4.33376H11.2092V6.09373H9.46753V4.33376Z" fill="#FFEC1A"/>
+            <path d="M7.72583 37.7905H9.46751V39.5566H7.72583V37.7905Z" fill="#FFEC1A"/>
+            <path d="M5.98425 32.5168H11.2091V34.2767H5.98425V32.5168Z" fill="#FFEC1A"/>
+            <path d="M7.72583 6.08761H9.46751V7.8537H7.72583V6.08761Z" fill="#FFEC1A"/>
+            <path d="M5.98425 36.0366H7.72593V37.7966H5.98425V36.0366Z" fill="#FFEC1A"/>
+            <path d="M5.98425 7.85966H7.72593V9.61963H5.98425V7.85966Z" fill="#FFEC1A"/>
+            <path d="M4.23657 34.2706H5.9843V36.0306H4.23657V34.2706Z" fill="#FFEC1A"/>
+            <path d="M4.23657 9.61352H5.9843V11.3735H4.23657V9.61352Z" fill="#FFEC1A"/>
+            <path d="M2.495 30.7447H4.23667V34.2706H2.495V30.7447Z" fill="#FFEC1A"/>
+            <path d="M2.495 11.3795H4.23667V14.8995H2.495V11.3795Z" fill="#FFEC1A"/>
+        </svg>
+        <p>Search</p>
     </div>
     <div class="windowIcon" data-window="window-dashboard">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="40"
-        height="40"
-        viewBox="0 0 40 40"
-        fill="none"
-      >
-        <path
-          d="M37.7152 1.92476H39.4251V37.7361H37.7152V1.92476Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M1.90979 37.7361H37.7152V39.44H1.90979V37.7361Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M32.6035 22.3892H34.3075V32.6185H32.6035V22.3892Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M7.02148 32.6185H32.6035V34.3283H7.02148V32.6185Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M27.4858 5.33842H29.1898V10.456H27.4858V5.33842Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M8.73706 13.8638H30.9054V15.5678H8.73706V13.8638Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M8.73706 24.099H30.9054V25.8088H8.73706V24.099Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M8.73706 29.2107H30.9054V30.9146H8.73706V29.2107Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M25.782 3.63454H27.4859V5.33849H25.782V3.63454Z"
-          fill="#FFEC1A"
-        />
-        <path d="M25.782 10.456H27.4859V12.16H25.782V10.456Z" fill="#FFEC1A" />
-        <path
-          d="M24.084 5.33842H25.7879V10.456H24.084V5.33842Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M7.02148 20.6853H32.6035V22.3893H7.02148V20.6853Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M5.32349 22.3892H7.02744V32.6185H5.32349V22.3892Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M7.02149 1.92476V13.8638H8.73709V1.92476H30.8996V13.8638H32.6035V1.92476H37.7152V0.221008H1.90979V1.92476H7.02149Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M0.205811 1.92476H1.90976V37.7361H0.205811V1.92476Z"
-          fill="#FFEC1A"
-        />
-      </svg>
-      <p>Dashboard</p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M37.7152 1.92476H39.4251V37.7361H37.7152V1.92476Z" fill="#FFEC1A"/>
+            <path d="M1.90979 37.7361H37.7152V39.44H1.90979V37.7361Z" fill="#FFEC1A"/>
+            <path d="M32.6035 22.3892H34.3075V32.6185H32.6035V22.3892Z" fill="#FFEC1A"/>
+            <path d="M7.02148 32.6185H32.6035V34.3283H7.02148V32.6185Z" fill="#FFEC1A"/>
+            <path d="M27.4858 5.33842H29.1898V10.456H27.4858V5.33842Z" fill="#FFEC1A"/>
+            <path d="M8.73706 13.8638H30.9054V15.5678H8.73706V13.8638Z" fill="#FFEC1A"/>
+            <path d="M8.73706 24.099H30.9054V25.8088H8.73706V24.099Z" fill="#FFEC1A"/>
+            <path d="M8.73706 29.2107H30.9054V30.9146H8.73706V29.2107Z" fill="#FFEC1A"/>
+            <path d="M25.782 3.63454H27.4859V5.33849H25.782V3.63454Z" fill="#FFEC1A"/>
+            <path d="M25.782 10.456H27.4859V12.16H25.782V10.456Z" fill="#FFEC1A"/>
+            <path d="M24.084 5.33842H25.7879V10.456H24.084V5.33842Z" fill="#FFEC1A"/>
+            <path d="M7.02148 20.6853H32.6035V22.3893H7.02148V20.6853Z" fill="#FFEC1A"/>
+            <path d="M5.32349 22.3892H7.02744V32.6185H5.32349V22.3892Z" fill="#FFEC1A"/>
+            <path d="M7.02149 1.92476V13.8638H8.73709V1.92476H30.8996V13.8638H32.6035V1.92476H37.7152V0.221008H1.90979V1.92476H7.02149Z" fill="#FFEC1A"/>
+            <path d="M0.205811 1.92476H1.90976V37.7361H0.205811V1.92476Z" fill="#FFEC1A"/>
+          </svg>
+        <p>Dashboard</p>
     </div>
     <div class="windowIcon" data-window="window-fileSystem">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="44"
-        height="38"
-        viewBox="0 0 44 38"
-        fill="none"
-      >
-        <path
-          d="M42.041 18.014H43.7826V23.3122H42.041V18.014Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M40.2914 23.3122H42.039V26.8504H40.2914V23.3122Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M38.5499 26.8505H40.2915V30.3827H38.5499V26.8505Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M36.8085 30.3826H38.5501V33.9208H36.8085V30.3826Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M35.0668 35.687H1.95339V33.9208H3.69498V28.6104H1.95339V7.40532H0.205933V37.453H36.8085V33.9207H35.0669L35.0668 35.687Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M8.91956 5.6393H28.0946V7.40542H8.91956V5.6393Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M8.91956 9.17754H28.0946V10.9437H8.91956V9.17754Z"
-          fill="#FFEC1A"
-        />
-        <path
-          d="M8.91956 12.7097H28.0946V14.4758H8.91956V12.7097Z"
-          fill="#FFEC1A"
-        />
-        <path d="M7.1781 18.014H8.9197V21.5463H7.1781V18.014Z" fill="#FFEC1A" />
-        <path
-          d="M3.69494 28.6105H5.43654V25.0844H7.17813V21.5462H5.43654V2.10719H31.5778V16.2358H8.91963V18.014H42.0391V16.2358H36.8084V10.9437H35.0668V16.2358H33.3254V10.9437H35.0668V9.17774H33.3254V0.329086H3.69509V5.6395H1.95349V7.40562H3.69509L3.69494 28.6105Z"
-          fill="#FFEC1A"
-        />
-      </svg>
-      <p>File System</p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="38" viewBox="0 0 44 38" fill="none">
+            <path d="M42.041 18.014H43.7826V23.3122H42.041V18.014Z" fill="#FFEC1A"/>
+            <path d="M40.2914 23.3122H42.039V26.8504H40.2914V23.3122Z" fill="#FFEC1A"/>
+            <path d="M38.5499 26.8505H40.2915V30.3827H38.5499V26.8505Z" fill="#FFEC1A"/>
+            <path d="M36.8085 30.3826H38.5501V33.9208H36.8085V30.3826Z" fill="#FFEC1A"/>
+            <path d="M35.0668 35.687H1.95339V33.9208H3.69498V28.6104H1.95339V7.40532H0.205933V37.453H36.8085V33.9207H35.0669L35.0668 35.687Z" fill="#FFEC1A"/>
+            <path d="M8.91956 5.6393H28.0946V7.40542H8.91956V5.6393Z" fill="#FFEC1A"/>
+            <path d="M8.91956 9.17754H28.0946V10.9437H8.91956V9.17754Z" fill="#FFEC1A"/>
+            <path d="M8.91956 12.7097H28.0946V14.4758H8.91956V12.7097Z" fill="#FFEC1A"/>
+            <path d="M7.1781 18.014H8.9197V21.5463H7.1781V18.014Z" fill="#FFEC1A"/>
+            <path d="M3.69494 28.6105H5.43654V25.0844H7.17813V21.5462H5.43654V2.10719H31.5778V16.2358H8.91963V18.014H42.0391V16.2358H36.8084V10.9437H35.0668V16.2358H33.3254V10.9437H35.0668V9.17774H33.3254V0.329086H3.69509V5.6395H1.95349V7.40562H3.69509L3.69494 28.6105Z" fill="#FFEC1A"/>
+          </svg>
+        <p>File System</p>
     </div>
 
     <!-- Windows -->
     <div id="window-chat" class="window">
-      <div class="header">
-        <p class="title">Chat</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content">
-        This is the content of Image oefnmeioufnwoeuifno
-      </div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Chat</p>
+            <a class="close">[ close ]</a>
+        </div>
+        <div class="content">This is the content of Image oefnmeioufnwoeuifno</div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-search" class="window">
-      <div class="header">
-        <p class="title">Search</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content">This is the content of Terminal</div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Search</p>
+            <a class="close">[ close ]</a>
+        </div>
+        <div class="content">This is the content of Terminal</div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-dashboard" class="window">
-      <div class="header">
-        <p class="title">Dashboard</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content">
-        <div id="dashboard-status">
-          <h2>Status Report <span class="color-yellow">[2]</span></h2>
+        <div class="header">
+            <p class="title">Dashboard</p>
+            <a class="close">[ close ]</a>
         </div>
-        <div id="dashboard-dna"></div>
-        <div id="dashboard-userdetails"></div>
-        <div id="dashboard-system">test</div>
-      </div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="content">
+            <div id="dashboard-status">
+                <h2>Status Report <span class="color-yellow">[2]</span></h2>
+            </div>
+            <div id="dashboard-dna"></div>
+            <div id="dashboard-userdetails"></div>
+            <div id="dashboard-system">test</div>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-fileSystem" class="window">
-      <div class="header">
-        <p class="title">File System</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content">
-        <div>
-          <p>
-            User credentials verified.<br />
-            Accessing system file browser...<br />
-            Access granted to system file browser.
-          </p>
+        <div class="header">
+            <p class="title">File System</p>
+            <a class="close">[ close ]</a>
         </div>
-        <div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>SCRIPT.txt</p>
-          </div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>script-gattaca.txt</p>
-          </div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>script-gattaca.txt</p>
-          </div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>script-gattaca.txt</p>
-          </div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>script-gattaca.txt</p>
-          </div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>script-gattaca.txt</p>
-          </div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>script-gattaca.txt</p>
-          </div>
-          <div class="windowIcon" data-window="window-file-script">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="39"
-              height="31"
-              viewBox="0 0 39 31"
-              fill="none"
-            >
-              <path
-                d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="15.1106"
-                y="23.3937"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-              <rect
-                x="17.6003"
-                y="26.7993"
-                width="2.48981"
-                height="3.40559"
-                fill="#FFEC1A"
-              />
-            </svg>
-            <p>script-gattaca.txt</p>
-          </div>
+        <div class="content">
+            <div>
+                <p>User credentials verified.<br>
+                    Accessing system file browser...<br>
+                    Access granted to system file browser.</p>
+            </div>
+            <div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+                <div class="windowIcon" data-window="window-file-script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="none">
+                        <path d="M23.8406 5.88246H32.4415V7.73878L6.63684 7.74081V5.88448L23.8406 5.88246ZM23.8406 22.0655V30.2527H25.6495V23.6656H36.7407V22.0637L23.8406 22.0655ZM36.7411 1.59921V22.0655H38.55V1.59921H36.7411ZM2.33818 -0.00274658V1.59921H36.7411V-0.00274658H2.33818ZM2.33818 5.6919V1.5974H0.529297V22.0658H2.33818V5.6919ZM2.33818 22.0658V23.6678L15.2387 23.6698V22.0678L2.33818 22.0658ZM6.63748 13.6877V15.544H23.8412V13.6877H6.63748ZM6.63748 9.78588V11.6422H28.1403V9.78588H6.63748Z" fill="#FFEC1A"/>
+                        <rect x="15.1106" y="23.3937" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                        <rect x="17.6003" y="26.7993" width="2.48981" height="3.40559" fill="#FFEC1A"/>
+                      </svg>
+                    <p>script-gattaca.txt</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <!-- Windows - file system -->
     <div id="window-file-script" class="window">
-      <div class="header">
-        <p class="title">script-gattaca.txt</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content">
-        This is the gattaca script
-        <iframe
-          src="assets/files/script-gattaca.pdf"
-          width="100%"
-          height="600px"
-        ></iframe>
-      </div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">script-gattaca.txt</p>
+            <a class="close">[ close ]</a>
+        </div>
+        <div class="content">This is the gattaca script</div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <!-- Windows - without icon -->
     <div id="window-geolocation" class="window">
-      <div class="header">
-        <p class="title">Analysing Location</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content"></div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Analysing Location</p>
+            <a class="close">[ close ]</a>
+        </div>
+        <div class="content"></div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-geolocation-video" class="window">
-      <div class="header">
-        <p class="title">Analysing Location</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content">
-        <video id="videoAnalyzingLocation" muted playsinline>
-          <source src="assets/videos/analyzing location.mp4" type="video/mp4" />
-        </video>
-      </div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Analysing Location</p>
+        </div>
+        <div class="content">
+            <video id="videoAnalyzingLocation" muted playsinline>
+                <source src="assets/videos/analyzing location.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-analysingFiles" class="window">
-      <div class="header">
-        <p class="title">Analysing local files</p>
-      </div>
-      <div class="content"></div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Analysing local files</p>
+        </div>
+        <div class="content">
+            <p>
+            <span class="color-green">Analyzing local files...</span><br>
+            <br>
+            [INFO] Starting file analysis...<br>
+            [INFO] Scanning directory: C:\Users\_chiaaaraaa\Documents<br>
+            [INFO] <span class="color-green">Found 342 files in the directory.</span><br>
+            <br>
+            <span class="color-yellow">[WARNING] Detected potential issue in file: system_log.txt</span><br>
+            [INFO]    - File type: Text Document<br>
+            [INFO]    - File size: 600 KB<br>
+            [INFO]    - Last modified: 2023-05-20 08:12<br>
+            <span class="color-yellow">[WARNING] - Unusual activity detected in log file entries.</span><br>
+            <br>
+            [INFO] Scanning directory: C:\Users\_chiaaaraaa\Downloads<br>
+            [INFO] Found 128 files in the directory.<br>
+            <br>
+            [INFO] Scanning file: gctaos.exe<br>
+            [INFO] - File type: Executable<br>
+            [INFO] - File size: 20.5 MB<br>
+            [INFO] - Last modified: 2023-06-01 17:50<br>
+            <br>
+            <span class="color-red">[ERROR]</span> Unable to access file: <span class="color-red">gattaca-movie.mp4</span><br>
+            [INFO]  - File type: MP4 Video<br>
+            [INFO]  - File size: 1.5 GB<br>
+            [INFO]  - Last modified: 2023-05-18 16:25<br>
+            <span class="color-red">[ERROR] - File appears to be corrupted.</span><br>
+            <br>
+            [INFO] Analysis complete.<br>
+            [INFO] Total files scanned: <span class="color-yellow">470</span><br>
+            [INFO] Total issues detected: <span class="color-green">2</span><br>
+            [INFO] Detailed report saved to: C:\_chiaaaraaa\Files\file_analysis_report.txt
+            </p>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-analysingBrowserHistory" class="window">
-      <div class="header">
-        <p class="title">Analysing web browsing history</p>
-      </div>
-      <div class="content"></div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Analysing web browsing history</p>
+        </div>
+        <div class="content">
+            <p>
+            <span class="color-green">Analyzing web browsing history...</span><br>
+            <br>
+            [INFO] Total entries found: 739'291<br>
+            [INFO] <span class="color-green">Non-hazardous: 645'026</span><br>
+            [INFO] <span class="color-green">Caution entries: 94'265</span><br>
+            <br>
+            <br>
+            <span class="color-green">Visited:</span> https://google.com/ is being analyzed.<br>
+            Date: 2024-06-07 09:12<br>
+            Duration: 4 minutes<br>
+            Code: aB12cDe3Fg<br>
+            <br>
+            <span class="color-green">Visited:</span> https://chatgpt.com/ is being analyzed.<br>
+            Date: 2024-06-06 21:39<br>
+            Duration: 1 hour<br>
+            Code: H4Ij5Kl6Mn<br>
+            <br>
+            <span class="color-green">Visited:</span> https://instagram.com/page/ is being analyzed.<br>
+            Date: 2024-06-06 15:20<br>
+            Duration: 2 hours<br>
+            Code: Op7Qr8St9U<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://elearning.hslu.ch/ is being analyzed.<br>
+            Date: 2024-06-06 12:45<br>
+            Duration: 1 hour<br>
+            Code: Vw0Xy1Za2B<br>
+            <br>
+            <span class="color-green">Visited:</span> https://di-wiki.ch/ is being analyzed.<br>
+            Date: 2024-06-06 10:30<br>
+            Duration: 30 minutes<br>
+            Code: Cd3Ef4Gh5I<br>
+            <br>
+            <span class="color-green">Visited:</span> https://mycampus.hslu.ch/ is being analyzed.<br>
+            Date: 2024-06-06 08:15<br>
+            Duration: 1 hour<br>
+            Code: Jk6Lm7No8P<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://github.com/ is being analyzed.<br>
+            Date: 2024-06-05 17:00<br>
+            Duration: 2 hours<br>
+            Code: Qr9St0Uv1W<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://www.20min.ch/ is being analyzed.<br>
+            Date: 2024-06-05 14:30<br>
+            Duration: 1 hour<br>
+            Code: Xy2Za3Bc4D<br>
+            <br>
+            <span class="color-green">Visited:</span> https://di-dides-gattaca.com/ is being analyzed.<br>
+            Date: 2024-06-05 12:00<br>
+            Duration: 30 minutes<br>
+            Code: Ef5Gh6Ij7K<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://www.blick.ch/ is being analyzed.<br>
+            Date: 2024-06-05 08:37<br>
+            Duration: 1 hour<br>
+            Code: Lm8No9Pq0R<br>
+            <br>
+            <span class="color-green">Visited:</span> https://www.instagram.com/ is being analyzed.<br>
+            Date: 2024-06-04 17:45<br>
+            Duration: 1 hours<br>
+            Code: St1Uv2Wx3Y<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://www.tiktok.com/explore is being analyzed.<br>
+            Date: 2024-06-04 14:23<br>
+            Duration: 3 hours<br>
+            Code: Za4Bc5De6F<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://www.20min.ch/ is being analyzed.<br>
+            Date: 2024-06-04 08:52<br>
+            Duration: 1 hour<br>
+            Code: Gh7Ij8Kl9M<br>
+            <br>
+            <span class="color-green">Visited:</span> https://www.zalando.ch/ is being analyzed.<br>
+            Date: 2024-06-03 17:30<br>
+            Duration: 4 hours<br>
+            Code: No0Pq1Rs2T<br>
+            <br>
+            <span class="color-green">Visited:</span> https://www.amazon.com/ is being analyzed.<br>
+            Date: 2024-06-03 12:07<br>
+            Duration: 52 minutes<br>
+            Code: Uv3Wx4Yz5A<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://www.youtube.com/ is being analyzed.<br>
+            Date: 2024-06-03 09:30<br>
+            Duration: 1 hour<br>
+            Code: Ef5Gh6Ij7K<br>
+            <br>
+            <span class="color-yellow">Caution:</span> https://www.pornhub.com/ is being analyzed.<br>
+            Date: 2024-06-02 20:26<br>
+            Duration: 1 hours<br>
+            Code: Lm8No9Pq0R<br>
+            <br>
+            <span class="color-green">Visited:</span> https://chatgpt.com/ is being analyzed.<br>
+            Date: 2024-06-02 17:30<br>
+            Duration: 27 minutes<br>
+            Code: St1Uv2Wx3Y<br>
+            <br>
+            <span class="color-green">Visited:</span> https://di-wiki.ch/ is being analyzed.<br>
+            Date: 2024-06-02 14:18<br>
+            Duration: 1 hour<br>
+            Code: Za4Bc5De6F<br>
+            <br>
+            <span class="color-green">Visited:</span> https://mycampus.hslu.ch/ is being analyzed.<br>
+            Date: 2024-06-02 10:48<br>
+            Duration: 14 minutes<br>
+            Code: Gh7Ij8Kl9M<br>
+            <br>
+            <br>
+            [INFO] To see previous analysed entries visit: https://gtca.com/profile/userdata/browserhistory
+            </p>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-analysingMessages" class="window">
-      <div class="header">
-        <p class="title">Analysing Messages</p>
-      </div>
-      <div class="content"></div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Analysing Messages</p>
+        </div>
+        <div class="content">
+            <p>
+            <span class="color-green">Analyzing messages...</span><br>
+            <br>
+            [INFO] Total messages found: 48'726<br>
+            <br>
+            <br>
+            <span class="color-yellow">Messages:</span> <span class="color-blue">From</span> Dario - "Wänns so seisch söttis mache🤪"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-green">To</span> Yannick - "der kommi kann ja nur von dir sein 🦦"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-blue">From</span> Michelle - "i gah ez id migros"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-green">To</span> 6er ide Gruppe - "das machi ebe amigs gern du mastsau"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-blue">From</span> Mike - "ICH MELD MICH SCHÜSCHT SCHNELL BI IHM 🥰🤭🫦"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-green">To</span> Lukas - "ayyy huere chic danke vielmal! 🫶🏼"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-blue">From</span> SCI-FI und so - "das modul heds ja in sich, sheeet"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-green">To</span> Yannick - "du als amateurgrafiker"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-green">To</span> Michelle - "i gah ez id migros"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-blue">From</span> Lukas - "oh shittt chiaraaaa"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-green">To</span> 6er ide Gruppe - "rugge schlimmer als am dario sis pickelface"<br>
+            <span class="color-yellow">Messages:</span> <span class="color-green">To</span> Michelle - "jaaa det bini sehr funny gsi😂😂"<br>
+            <br>
+            <br>
+            [INFO] To see previous analysed messages visit: https://gtca.com/profile/userdata/messages
+            </p>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-userVerify" class="window">
-      <div class="header">
-        <p class="title">Verify User</p>
-      </div>
-      <div class="content">
-        <p>Verify your Adress:</p>
-        <h2>
-          <span class="color-yellow"
-            >Alsenmattstrasse 15<br />
-            8800 Thalwil</span
-          >
-        </h2>
-        <p class="button" id="button-user-verify">
-          <span class="color-blue">> verify</span>
-        </p>
-        <p class="button" id="button-user-decline">
-          <span class="color-blue">> decline</span>
-        </p>
-      </div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Verify User</p>
+        </div>
+        <div class="content">
+            <h2><span class="color-yellow">Alsenmattstrasse 15<br>
+            8800 Thalwil</span></h2>
+            <br>
+            <p class="button" id="button-user-verify"><span class="color-blue">> </span>verify</p>
+            <br>
+            <p class="button" id="button-user-decline"><span class="color-blue">> </span>decline</p>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-userData" class="window">
-      <div class="header">
-        <p class="title">User Data</p>
-        <a class="close">[ close ]</a>
-      </div>
-      <div class="content">
-        <p>User-ID: 453905202367</p>
-      </div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">User Data</p>
+            <a class="close">[ close ]</a>
+        </div>
+        <div class="content">
+            <p>User-ID: 453905202367</p>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
+    </div>
+    <div id="window-typetest" class="window">
+        <div class="header">
+            <p class="title">User Data</p>
+        </div>
+        <div class="content">
+            <p>Please write the following code in the terminal:<br>
+                <br>
+                <span class="color-blue">> </span>g7t4cA3T4GB9cX8yZ7</p>
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
+    </div>
+    <div id="window-image1" class="window">
+        <div class="header">
+            <p class="title">User Data</p>
+        </div>
+        <div class="content">
+            <img src="assets/images/cursor.svg" alt="">
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
+    </div>
+    <div id="window-image2" class="window">
+        <div class="header">
+            <p class="title">User Data</p>
+        </div>
+        <div class="content">
+            <img src="assets/images/cursor.svg" alt="">
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
+    </div>
+    <div id="window-image3" class="window">
+        <div class="header">
+            <p class="title">User Data</p>
+        </div>
+        <div class="content">
+            <img src="assets/images/cursor.svg" alt="">
+        </div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
     <div id="window-transitionToSystem" class="window">
-      <div class="header">
-        <p class="title">Analysing your Data</p>
-      </div>
-      <div class="content"></div>
-      <div class="footer">
-        <p>Chiara Tremml</p>
-        <p>Status [2]</p>
-        <p class="windowSize"></p>
-      </div>
+        <div class="header">
+            <p class="title">Analysing your Data</p>
+        </div>
+        <div class="content"></div>
+        <div class="footer">
+            <p>Chiara Tremml</p>
+            <p>Status [2]</p>
+            <p class="windowSize"></p>
+        </div>
     </div>
-  </body>
+</body>
 </html>

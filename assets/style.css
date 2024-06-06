@@ -15,6 +15,7 @@
     --yellow: #FFEC1A;
     --green: #2BD92B;
     --blue: #3388FF;
+    --red: #D92B2B;
 }
 
 /* animations */
@@ -62,6 +63,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, section, main, div, li, figcaption {
 
 .color-grey {
     color: var(--grey);
+}
+
+.color-red {
+    color: var(--red);
 }
 
 .blur {
@@ -306,6 +311,10 @@ body {
     user-select: none;
 }
 
+#window-userData .content p {
+    user-select: initial;
+}
+
 /* //////////////////////////////////////////////////////////////////////////////////////// */
 /* window custom size & position */
 /* //////////////////////////////////////////////////////////////////////////////////////// */
@@ -442,9 +451,9 @@ body {
 
 #window-userVerify {
     width: 500px;
-    height: 700px;
-    top: 30px;
-    left: 800px;
+    height: 400px;
+    top: 150px;
+    left: 500px;
 }
 
 #window-userData {
