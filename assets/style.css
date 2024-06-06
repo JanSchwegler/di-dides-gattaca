@@ -457,6 +457,11 @@ body {
     font-size: 1.2rem;
 }
 
+#window-dashboard #dashboard-dna video {
+    width: 100%;
+    height: auto;
+}
+
 #window-fileSystem {
     top: 200px;
     left: 300px;
