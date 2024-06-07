@@ -129,7 +129,7 @@ let chapterProgress = [
 ];
 let cpuUsage = 50;
 let memoryUsage = 25;
-let geoLocationApi = false;
+let geoLocationApi = true;
 
 // variables - elements
 let terminalEmptyHtml;
